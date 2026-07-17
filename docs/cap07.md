@@ -1,6 +1,6 @@
 ## 7. Compilação Separada e Bibliotecas Externas
 
-Nos capítulos anteriores, vimos como estruturar dados complexos com [structs](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap05.md) e como gerenciar memória dinamicamente usando [ponteiros](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap06.md). Também arranhamos a superfície de dividir o código em múltiplos arquivos no [Capítulo 3](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap03.md). Agora, vamos entender a fundo o processo de **compilação separada** e como o C interage com **bibliotecas externas** do mundo real, comparando esses mecanismos com o que acontece em Python e em JavaScript.
+Nos capítulos anteriores, vimos como estruturar dados complexos com [structs](cap05.md) e como gerenciar memória dinamicamente usando [ponteiros](cap06.md). Também arranhamos a superfície de dividir o código em múltiplos arquivos no [Capítulo 3](cap03.md). Agora, vamos entender a fundo o processo de **compilação separada** e como o C interage com **bibliotecas externas** do mundo real, comparando esses mecanismos com o que acontece em Python e em JavaScript.
 
 !!! note "O processo por trás da mágica"
     Em Python ou JavaScript, quando você quer usar uma biblioteca, basta um comando (`pip install` ou `npm install`) e uma linha no código (`import` ou `require`). Em C, não existe um gerenciador de pacotes universal e embutido na linguagem. O C nos obriga a entender as etapas físicas que o código atravessa até virar um executável. Embora isso dê mais trabalho, nos dá um controle total sobre o consumo de memória e a performance do programa.
@@ -34,15 +34,15 @@ graph TD
 
 ---
 
-### 7.2. Compilação Separada na Prática: Exemplo da Conta Bancária
+### 7.2. Compilação separada na prática: exemplo da conta bancária
 
 Para entender a compilação separada, vamos criar um sistema simples de **Conta Bancária** dividido em três arquivos:
 
-1. `conta.h`: Contém a definição da estrutura de dados ([struct](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap05.md)) e os protótipos das funções (a "interface" da biblioteca).
+1. `conta.h`: Contém a definição da estrutura de dados ([struct](cap05.md)) e os protótipos das funções (a "interface" da biblioteca).
 2. `conta.c`: Contém a implementação real das funções da conta bancária (o "corpo" do código).
 3. `main.c`: O programa principal que utiliza a conta bancária para realizar operações.
 
-#### 1. O Cabeçalho: `conta.h`
+#### 1. O cabeçalho: `conta.h`
 
 ```c
 #ifndef CONTA_H
@@ -65,7 +65,7 @@ void exibir(const ContaBancaria *c);
 !!! note "Guardas de Inclusão (#ifndef, #define, #endif)"
     As diretivas `#ifndef CONTA_H`, `#define CONTA_H` e `#endif` são chamadas de **guardas de inclusão** (header guards). Elas garantem que, mesmo que `conta.h` seja incluído múltiplas vezes no mesmo projeto (por exemplo, se `main.c` incluir `conta.h` e outra biblioteca também o fizer), o compilador não tentará ler e declarar a estrutura `ContaBancaria` duas vezes, o que geraria um erro de "redefinição de tipo".
 
-#### 2. A Implementação: `conta.c`
+#### 2. A implementação: `conta.c`
 
 ```c
 #include <stdio.h>
@@ -95,7 +95,10 @@ void exibir(const ContaBancaria *c) {
 }
 ```
 
-#### 3. O Programa Principal: `main.c`
+!!! note "O `const` antes do ponteiro"
+    Repare no `const` antes de `ContaBancaria *c` no protótipo de `exibir`. Isso é uma promessa ao compilador: esta função só vai *ler* os campos de `c` através do ponteiro, nunca alterá-los. Se o corpo da função tentar fazer `c->saldo = 0;`, o compilador recusa a compilação. É uma forma de deixar explícito, só pela assinatura da função, que ela não modifica o struct original — parecido com o que fizemos na Seção 5.2 ao decidir entre receber um struct por valor ou por ponteiro, só que aqui pedimos o "melhor dos dois mundos": a eficiência de passar só um endereço, sem o risco de alterar o original.
+
+#### 3. O programa principal: `main.c`
 
 ```c
 #include <stdio.h>
@@ -122,7 +125,7 @@ int main() {
 }
 ```
 
-#### Compilando e Linkando Passo a Passo
+#### Compilando e linkando passo a passo
 
 Em vez de compilar tudo de uma vez com `gcc main.c conta.c -o programa`, podemos realizar a compilação separada. Isso é crucial para grandes projetos, pois se você alterar apenas o `main.c`, não precisa recompilar o `conta.c` inteiro novamente:
 
@@ -315,25 +318,25 @@ minha_conta.exibir()
 
 ---
 
-### 7.4. Bibliotecas Externas: C vs Python vs JavaScript
+### 7.4. Bibliotecas externas: C vs Python vs JavaScript
 
 No desenvolvimento moderno, raramente escrevemos tudo do zero. Usamos bibliotecas criadas por terceiros. Vamos ver a diferença brutal de como cada ecossistema lida com isso.
 
-#### Python (PIP)
+#### Python (`pip`)
 Em Python, instalamos bibliotecas a partir do repositório central PyPI usando o `pip`:
 ```bash
 pip install requests
 ```
 O pacote é baixado para a sua pasta de ambiente virtual (`.venv`) ou global do sistema. Ao rodar `import requests`, o interpretador Python sabe exatamente em qual diretório procurar a biblioteca instalada e a carrega dinamicamente. Você não precisa passar nenhuma configuração de compilação adicional ao rodar seu código.
 
-#### JavaScript / Node.js (NPM)
+#### JavaScript / Node.js (`npm`)
 Em JavaScript/Node.js, instalamos via `npm`:
 ```bash
 npm install axios
 ```
 A biblioteca é baixada para a pasta `node_modules` local do projeto. Quando fazemos `import axios from 'axios'` ou `require('axios')`, o NodeJS resolve a dependência procurando recursivamente na pasta `node_modules`. Toda a resolução de caminho é abstraída pelo runtime.
 
-#### C (Compilação e Linkagem Manual com Tags)
+#### C (compilação e linkagem manual com tags)
 Em C, as coisas são mais primitivas e próximas do sistema operacional. Se quisermos usar uma biblioteca externa (como a biblioteca do PostgreSQL `libpq` ou o driver do MongoDB `libmongoc`), o processo costuma ser:
 
 1. **Instalar os arquivos de desenvolvimento no sistema**:
@@ -355,7 +358,7 @@ Abaixo está o exemplo conceitual de como o compilador precisa receber essas tag
 gcc -I/usr/include/postgresql exemplopq.c -o programa -L/usr/lib/postgresql -lpq
 ```
 
-#### O Salvador: `pkg-config`
+#### O salvador: `pkg-config`
 
 Decorar todos os caminhos de cabeçalhos e nomes de bibliotecas de terceiros no sistema é impraticável. Para resolver isso, usamos uma ferramenta utilitária chamada `pkg-config`. Ela consulta a instalação da biblioteca no sistema e imprime as tags corretas para o compilador:
 
@@ -380,7 +383,7 @@ Isso torna o processo de compilação com bibliotecas externas muito mais portá
 
 ---
 
-### 7.5. Lista de Exercícios
+### 7.5. Lista de exercícios
 
 #### Conceituais
 1. Explique, com suas palavras, qual a diferença entre um arquivo de cabeçalho (`.h`) e um arquivo de código fonte (`.c`). Por que não devemos escrever o corpo das funções dentro de um arquivo `.h`?
