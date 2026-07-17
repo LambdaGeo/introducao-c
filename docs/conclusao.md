@@ -5,9 +5,9 @@ Parabéns! Se você chegou até aqui, você concluiu com sucesso a sua jornada d
 Ao longo deste material, você aprendeu a:
 * Traduzir a sintaxe básica de variáveis, condicionais e laços de repetição.
 * Entender o papel do pré-processador, cabeçalhos (`.h`) e a criação de protótipos de funções.
-* Trabalhar com vetores de tamanho fixo, strings e estruturas de dados personalizadas ([structs](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap05.md)).
-* Dominar o uso de [ponteiros e alocação dinâmica](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap06.md) de memória no Heap, gerenciando a memória do seu computador de forma manual e eficiente.
-* Organizar projetos reais em [múltiplos arquivos](file:///home/sergio/develop/github/lambdageo/cpy-mkdocs/docs/cap07.md) com compilação separada, automatização com `Makefile` e integração de bibliotecas de terceiros usando `pkg-config`.
+* Trabalhar com vetores de tamanho fixo, strings e estruturas de dados personalizadas ([structs](cap05.md)).
+* Dominar o uso de [ponteiros e alocação dinâmica](cap06.md) de memória no Heap, gerenciando a memória do seu computador de forma manual e eficiente.
+* Organizar projetos reais em [múltiplos arquivos](cap07.md) com compilação separada, automatização com `Makefile` e integração de bibliotecas de terceiros usando `pkg-config`.
 
 ### Por que o C faz diferença na sua carreira?
 
