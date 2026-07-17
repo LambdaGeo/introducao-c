@@ -35,6 +35,7 @@ E sobre usar IA (Claude, ChatGPT ou qualquer outra) enquanto estuda:
 * [5. Structs (registros)](cap05.md)
 * [6. Ponteiros e Alocação Dinâmica](cap06.md)
 * [7. Compilação Separada e Bibliotecas Externas](cap07.md)
+* [Conclusão e Próximos Passos](conclusao.md)
 
 ## Testando online
 

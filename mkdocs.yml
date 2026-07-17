@@ -46,6 +46,7 @@ nav:
   - "5. Structs (registros)": cap05.md
   - "6. Ponteiros e Alocação Dinâmica": cap06.md
   - "7. Compilação Separada e Bibliotecas Externas": cap07.md
+  - "Conclusão e Próximos Passos": conclusao.md
 
 markdown_extensions:
   - admonition
