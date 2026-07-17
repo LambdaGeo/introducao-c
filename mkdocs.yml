@@ -1,0 +1,68 @@
+site_name: "C para Programadores Python e VisuAlg"
+site_description: "Adaptado de 'C for Python Programmers' (Carl Burch / Elizabeth Patitsas), ampliado com comparações e exercícios de mapeamento Python/VisuAlg → C."
+site_author: "Sergio Costa"
+
+# Troque pelo seu usuário/repositório do GitHub antes de publicar:
+# site_url: https://SEU-USUARIO.github.io/SEU-REPOSITORIO/
+# repo_url: https://github.com/SEU-USUARIO/SEU-REPOSITORIO
+# repo_name: SEU-USUARIO/SEU-REPOSITORIO
+
+docs_dir: docs
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Modo escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Modo claro
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Início: index.md
+  - "1. Construindo um simples programa": cap01.md
+  - "2. Expressões e comandos": cap02.md
+  - "3. Bibliotecas": cap03.md
+  - "4. Vetores e Strings": cap04.md
+  - "5. Structs (registros)": cap05.md
+  - "6. Ponteiros e Alocação Dinâmica": cap06.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+plugins:
+  - search
+
+extra:
+  social: []

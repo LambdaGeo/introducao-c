@@ -1,0 +1,43 @@
+Este trabalho — "C para Programadores Python e VisuAlg" — é uma obra derivada de
+"C for Python Programmers", de Carl Burch (Hendrix College, agosto de 2011),
+com modificações de Elizabeth Patitsas (University of Toronto, dezembro de 2012).
+
+Obra original: http://www.toves.org/books/cpy/
+Versão com modificações de Patitsas: https://www.cs.toronto.edu/~patitsas/cs190/c_for_python.html
+
+"C for Python Programmers" está licenciado sob a licença
+Creative Commons Atribuição-CompartilhaIgual 3.0 Estados Unidos
+(CC BY-SA 3.0 US):
+
+    https://creativecommons.org/licenses/by-sa/3.0/us/
+
+Como o presente trabalho incorpora e traduz partes substanciais do texto
+original, ele é distribuído sob os termos da mesma licença, CC BY-SA 3.0 US.
+
+Isso significa que qualquer pessoa é livre para:
+
+  - Compartilhar — copiar e redistribuir o material em qualquer suporte ou
+    formato.
+  - Adaptar — remixar, transformar e criar a partir do material para
+    qualquer fim, inclusive comercial.
+
+Sob as seguintes condições:
+
+  - Atribuição — Você deve dar o crédito apropriado a Carl Burch e
+    Elizabeth Patitsas (obra original), fornecer um link para a licença e
+    indicar se mudanças foram feitas. Você deve fazê-lo de maneira razoável,
+    mas de nenhuma maneira que sugira que os licenciantes originais
+    apoiam você ou o seu uso.
+  - CompartilhaIgual — Se você remixar, transformar ou criar a partir do
+    material, deve distribuir suas contribuições sob a mesma licença que
+    o original.
+
+Texto legal completo da licença (em inglês):
+https://creativecommons.org/licenses/by-sa/3.0/us/legalcode
+
+---
+
+As adições e adaptações desta versão em relação à obra original — traduções,
+comparações com VisuAlg, exercícios de mapeamento, listas de exercícios por
+capítulo e os capítulos "Vetores e Strings", "Structs (registros)" e
+"Ponteiros e Alocação Dinâmica" — seguem a mesma licença CC BY-SA 3.0 US.
