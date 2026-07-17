@@ -1,0 +1,854 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Adaptado de 'C for Python Programmers' (Carl Burch / Elizabeth Patitsas), ampliado com comparações e exercícios de mapeamento Python/VisuAlg → C.">
+      
+      
+        <meta name="author" content="Sergio Costa">
+      
+      
+      
+        <link rel="prev" href="../cap02/">
+      
+      
+        <link rel="next" href="../cap04/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>3. Bibliotecas - C para Programadores Python e VisuAlg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3-bibliotecas" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-header__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C para Programadores Python e VisuAlg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. Bibliotecas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-nav__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    C para Programadores Python e VisuAlg
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Construindo um simples programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Expressões e comandos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Bibliotecas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Bibliotecas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-bibliotecas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Bibliotecas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Bibliotecas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-prototipos-de-funcao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Protótipos de função
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-arquivos-de-cabecalho-header-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Arquivos de cabeçalho (Header files)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-constantes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Constantes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Vetores e Strings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Structs (registros)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Ponteiros e Alocação Dinâmica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Compilação Separada e Bibliotecas Externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conclusao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusão e Próximos Passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-bibliotecas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Bibliotecas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Bibliotecas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-prototipos-de-funcao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Protótipos de função
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-arquivos-de-cabecalho-header-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Arquivos de cabeçalho (Header files)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-constantes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Constantes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>3. Bibliotecas</h1>
+
+<h2 id="3-bibliotecas">3. Bibliotecas<a class="headerlink" href="#3-bibliotecas" title="Permanent link">&para;</a></h2>
+<p>Tendo discutido as funções internas, agora nos voltamos para discutir questões relacionadas a funções e separar um programa em vários arquivos.</p>
+<div class="admonition note">
+<p class="admonition-title">Um capítulo sem muito equivalente direto</p>
+<p>Diferente dos capítulos anteriores, os três assuntos aqui (protótipos, arquivos de cabeçalho e diretivas de pré-processador) não têm um mapeamento direto em VisuAlg, porque o VisuAlg não tem essas ideias: todo algoritmo VisuAlg vive em um único arquivo, sem um passo de pré-processamento separado. Em Python o mais próximo é o sistema de módulos (<code>import</code>), mas mesmo assim os mecanismos são bem diferentes por baixo dos panos. Por isso, aqui vamos focar em <strong>explicar o "porquê"</strong> de cada mecanismo existir em C — que é justamente o tipo de coisa que não dá pra simplesmente "traduzir" de uma linguagem que você já conhece, porque a necessidade em si é nova.</p>
+</div>
+<h3 id="31-prototipos-de-funcao">3.1. Protótipos de função<a class="headerlink" href="#31-prototipos-de-funcao" title="Permanent link">&para;</a></h3>
+<p>Em C, uma função deve ser declarada acima do local onde você a usa. No programa C de [Figura 2], definimos a função <code>gcd ()</code> primeiro, depois a função <code>main ()</code>. Isto é significativo: Se nós trocamos as funções <code>gcd ()</code> e <code>main ()</code>, o compilador iria reclamar em <code>main()</code>que a função <code>gcd ()</code> não foi declarada. Isso porque C assume que um compilador lê um programa de cima para baixo: No momento em que chega ao <code>main ()</code>, ele não foi informado sobre uma função <code>gcd ()</code>, e por isso ele acredita que a função não exista.</p>
+<p>Nem Python nem VisuAlg têm essa exigência: em ambos, o comum é definir todas as funções antes de usá-las de qualquer forma (é uma boa prática), mas nenhum dos dois erros se você, por exemplo, definir duas funções que chamam uma à outra (recursão mútua) — Python resolve isso em tempo de execução, quando a chamada de fato acontece, não em tempo de leitura do arquivo.</p>
+<p>Isso gera um problema, especialmente em programas maiores que abrangem vários arquivos, em que as funções de um arquivo precisarão chamar funções em outro. Para contornar isso, C fornece a noção de um <strong>protótipo de função</strong>, onde escrevemos o cabeçalho da função mas omitimos a definição do corpo.</p>
+<p>Por exemplo, digamos que queremos quebrar nosso programa C em dois arquivos: O primeiro arquivo, math.c, conterá a função <code>gcd ()</code> e o segundo arquivo, main.c, conterá o <code>main ()</code>função. O problema com isso é que, na compilação main.c, o compilador não saberá sobre a função <code>gcd ()</code> que está tentando chamar.</p>
+<p>Uma solução é incluir um protótipo de função em main.c.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">gcd</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;GCD: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">gcd</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">));</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>A linha <code>int gcd ...</code> é o protótipo da função. Você pode ver que começa da mesma forma que uma definição de função, mas nós simplesmente colocamos um ponto-e-vírgula onde o corpo da função normalmente seria. Ao fazer isso, estamos declarando que a função será eventualmente definida, mas ainda não a definimos. O compilador aceita isso e obedientemente compila o programa sem reclamações.</p>
+<h3 id="32-arquivos-de-cabecalho-header-files">3.2. Arquivos de cabeçalho (Header files)<a class="headerlink" href="#32-arquivos-de-cabecalho-header-files" title="Permanent link">&para;</a></h3>
+<p>Programas maiores que abrangem vários arquivos freqüentemente contêm muitas funções que são usadas muitas vezes em muitos arquivos diferentes. Seria doloroso repetir cada protótipo de função em todos os arquivos que usam a função. Então, criamos um arquivo - chamado de <strong>arquivo de cabeçalho</strong> - que contém cada protótipo escrito apenas uma vez (e possivelmente algumas informações compartilhadas adicionais), e então podemos nos referir a esse arquivo de cabeçalho em cada arquivo de origem que deseja os protótipos. O arquivo de protótipos é chamado de arquivo de cabeçalho, pois contém as "heads" ou "cabeças" de várias funções. Convencionalmente, os arquivos de cabeçalho usam o prefixo <code>.h</code>, em vez do prefixo <code>.c</code> usado para os arquivos fonte C.</p>
+<p>Por exemplo, podemos colocar o protótipo da nossa função <code>gcd ()</code> em um arquivo de cabeçalho chamado math.h.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">gcd</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+</code></pre></div>
+<p>Podemos usar um tipo especial de linha começando com <code>#include</code> para incorporar este arquivo de cabeçalho no topo do main.c.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;math.h&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;GCD: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="n">gcd</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">));</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>Este exemplo em particular não é muito convincente, mas imagine uma biblioteca que consiste em dezenas de funções, que são usadas em dezenas de arquivos: De repente, a economia de tempo de ter apenas um único protótipo para cada função em um arquivo de cabeçalho começa a fazer sentido.</p>
+<p>A linha <code>#include</code> é um exemplo de uma diretiva para o pré-processador do C, através da qual o compilador C envia cada programa antes de compilá-lo. Um programa pode conter comandos (<strong>diretivas</strong>) informando ao pré-processador para manipular o texto do programa que o compilador realmente processa. A diretiva <code>#include</code> diz ao pré-processador para substituir a linha<code>#include</code> pelo conteúdo do arquivo especificado.</p>
+<p>Você notará que colocamos <code>stdio.h</code> entre colchetes, enquanto <code>math.h</code> está entre aspas duplas. Os colchetes angulares são para arquivos de cabeçalho padrão - arquivos mais ou menos incorporados ao sistema C. As aspas são para arquivos de cabeçalho personalizados que podem ser encontrados no mesmo diretório dos arquivos fonte.</p>
+<p>Se você já usou <code>import</code> em Python, a <em>motivação</em> de <code>#include</code> vai soar familiar (reaproveitar código escrito em outro arquivo) — mas o <em>mecanismo</em> é bem diferente, e vale a pena não confundir os dois:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>#include</code> de C</th>
+<th><code>import</code> de Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O que faz</td>
+<td>Copia e cola o texto do arquivo, literalmente, antes de compilar</td>
+<td>Carrega o módulo já compilado/executado uma vez, e expõe seus nomes</td>
+</tr>
+<tr>
+<td>Quando roda</td>
+<td>Em uma etapa de pré-processamento, antes do compilador ver o código</td>
+<td>Em tempo de execução, na primeira vez que o <code>import</code> é alcançado</td>
+</tr>
+<tr>
+<td>O que é incluído</td>
+<td>Normalmente só os protótipos (<code>.h</code>) — o código de verdade (<code>.c</code>) é compilado e "linkado" à parte</td>
+<td>O módulo inteiro, incluindo o código executável das funções</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-constantes">3.3. Constantes<a class="headerlink" href="#33-constantes" title="Permanent link">&para;</a></h3>
+<p>Outra diretiva de pré-processador particularmente útil é a diretiva <code>#define</code>. Ela diz ao pré-processador para substituir todas as ocorrências futuras de alguma palavra por outra.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">#define PI 3.14159</span>
+</code></pre></div>
+<p>Neste fragmento, dissemos ao pré-processador que, para o resto do programa, ele deveria substituir cada ocorrência de "PI" por "3.14159". Suponha que mais tarde no programa tenha a seguinte linha:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;area: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">PI</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="p">);</span>
+</code></pre></div>
+Vendo isso, o pré-processador iria traduzi-lo no seguinte texto para o compilador C processar:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;area: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">3.14159</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">r</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>vamos testar ? :)</p>
+</blockquote>
+<p>Essa substituição acontece nos bastidores, para que o programador não veja a substituição.</p>
+<p>VisuAlg tem uma ideia de constante nomeada (<code>const PI = 3.14159</code>) e Python também tem a convenção de variáveis em maiúsculas para indicar "isso é uma constante" (<code>PI = 3.14159</code>) — mas em nenhum dos dois casos existe uma etapa de pré-processamento textual por trás: é só uma variável comum, guardada na memória como qualquer outra, que por convenção (ou, no caso do VisuAlg, por declaração explícita com <code>const</code>) não deveria ser reatribuída. O <code>#define</code> de C é mais poderoso (e mais perigoso) que isso, porque ele nem chega a existir como variável — é apenas texto substituído antes da compilação, como mostra o próximo exemplo.</p>
+<p>A diretiva <code># define</code> não está restrita a definir constantes como essa, no entanto. Por usar apenas substituição textual, a diretiva pode ser usada (e abusada) de outras maneiras. Por exemplo, pode-se incluir o seguinte.</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="cp">#define forever while(1)</span>
+</code></pre></div>
+Posteriormente, você poderia usar <code>forever</code> como se fosse uma construção de loop, e o pré-processador a substituiria por" <code>while(1)</code> ".</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">forever</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">     </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;hello world</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">}</span>
+</code></pre></div>
+Os programadores especialistas em C consideram esse estilo muito ruim, já que ele leva rapidamente a programas ilegíveis. Nem Python nem VisuAlg têm como fazer algo parecido — e esse exemplo é justamente uma boa demonstração de por que a maioria das linguagens mais novas optou por não ter um pré-processador textual tão livre quanto o de C.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 3.1</p>
+<p>Este exercício é um pouco diferente dos anteriores, porque não existe uma linha de VisuAlg ou Python para "traduzir" — o objetivo é justamente notar a ausência.</p>
+<p>Imagine que você tem, em Python, dois arquivos: <code>matematica.py</code> (com uma função <code>mdc(a, b)</code>) e <code>main.py</code>, que faz <code>from matematica import mdc</code> e usa a função. Sem escrever código C ainda, responda: por que, em C, para fazer a mesma separação em dois arquivos (<code>math.c</code> e <code>main.c</code>), você <strong>precisa</strong> de um arquivo <code>math.h</code> com o protótipo de <code>mdc</code>, e não basta simplesmente compilar os dois arquivos <code>.c</code> juntos? (Dica: pense em quando o compilador de C lê <code>main.c</code> — ele já leu <code>math.c</code> nesse momento?)</p>
+</div>
+<p>Estas são as noções básicas de escrever programas em C, dando-lhe o suficiente para poder escrever programas razoavelmente úteis. Mas, para ser um programador proficiente em C, você precisaria saber sobre ponteiros - um tópico que adiaremos em outro momento.</p>
+<h3 id="34-lista-de-exercicios">3.4. Lista de exercícios<a class="headerlink" href="#34-lista-de-exercicios" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Você tem uma função <code>int quadrado(int x)</code> que calcula o quadrado de um número, usada dentro de um <code>main</code> que lê um número do usuário e imprime o seu quadrado. Separe esse programa em três arquivos: <code>quadrado.h</code> (com o protótipo), <code>quadrado.c</code> (com a definição da função) e <code>main.c</code> (com o <code>main</code>, incluindo <code>quadrado.h</code>). Escreva também o comando <code>gcc</code> necessário para compilar os dois arquivos <code>.c</code> juntos, gerando um único executável.</li>
+<li>Use <code>#define</code> para criar duas constantes, <code>VERDADEIRO</code> como <code>1</code> e <code>FALSO</code> como <code>0</code>, e escreva um pequeno programa que declare uma variável <code>int encontrou</code> e a use dentro de um <code>if</code>, comparando com <code>VERDADEIRO</code>. Depois, imagine (sem rodar) qual seria o texto exato que o pré-processador entrega ao compilador, com <code>VERDADEIRO</code>/<code>FALSO</code> já substituídos.</li>
+<li>Reescreva o Exercício 8 da lista do Capítulo 2 (números amigáveis) definindo, com <code>#define</code>, um <code>LIMITE</code> para o intervalo de busca (por exemplo, <code>#define LIMITE 10000</code>), e use <code>LIMITE</code> no lugar do número mágico espalhado pelo código.</li>
+<li>
+<p><em>(desafio)</em> A diretiva <code>#define</code> também aceita "parâmetros", nesse formato:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="cp">#define QUADRADO(x) ((x) * (x))</span>
+</code></pre></div>
+<p>Isso não é uma função de verdade — continua sendo substituição de texto, só que agora com uma "lacuna" preenchida pelo que você passar no lugar de <code>x</code>. Escreva um pequeno programa que use <code>QUADRADO(5)</code> dentro de um <code>printf</code>. Depois, tente prever (e depois teste) o que acontece com <code>QUADRADO(2 + 3)</code> — o resultado é 25, como você esperaria de uma função, ou é outra coisa? Os parênteses extras ao redor de <code>(x)</code> na definição da macro são exatamente o que evita (ou não evita) esse problema; tente entender por quê comparando com e sem eles.</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

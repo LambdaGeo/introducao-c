@@ -1,0 +1,1148 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Adaptado de 'C for Python Programmers' (Carl Burch / Elizabeth Patitsas), ampliado com comparações e exercícios de mapeamento Python/VisuAlg → C.">
+      
+      
+        <meta name="author" content="Sergio Costa">
+      
+      
+      
+        <link rel="prev" href="../cap06/">
+      
+      
+        <link rel="next" href="../conclusao/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>7. Compilação Separada e Bibliotecas Externas - C para Programadores Python e VisuAlg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#7-compilacao-separada-e-bibliotecas-externas" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-header__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C para Programadores Python e VisuAlg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              7. Compilação Separada e Bibliotecas Externas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-nav__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    C para Programadores Python e VisuAlg
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Construindo um simples programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Expressões e comandos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Bibliotecas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Vetores e Strings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Structs (registros)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Ponteiros e Alocação Dinâmica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Compilação Separada e Bibliotecas Externas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Compilação Separada e Bibliotecas Externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#7-compilacao-separada-e-bibliotecas-externas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Compilação Separada e Bibliotecas Externas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Compilação Separada e Bibliotecas Externas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-como-funciona-o-processo-de-compilacao-em-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Como funciona o processo de compilação em C
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-compilacao-separada-na-pratica-exemplo-da-conta-bancaria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Compilação separada na prática: exemplo da conta bancária
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-comparacao-com-python-e-visualg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3. Comparação com Python e VisuAlg
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-bibliotecas-externas-c-vs-python-vs-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4. Bibliotecas externas: C vs Python vs JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conclusao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusão e Próximos Passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#7-compilacao-separada-e-bibliotecas-externas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Compilação Separada e Bibliotecas Externas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Compilação Separada e Bibliotecas Externas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-como-funciona-o-processo-de-compilacao-em-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1. Como funciona o processo de compilação em C
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-compilacao-separada-na-pratica-exemplo-da-conta-bancaria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2. Compilação separada na prática: exemplo da conta bancária
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-comparacao-com-python-e-visualg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3. Comparação com Python e VisuAlg
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-bibliotecas-externas-c-vs-python-vs-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4. Bibliotecas externas: C vs Python vs JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>7. Compilação Separada e Bibliotecas Externas</h1>
+
+<h2 id="7-compilacao-separada-e-bibliotecas-externas">7. Compilação Separada e Bibliotecas Externas<a class="headerlink" href="#7-compilacao-separada-e-bibliotecas-externas" title="Permanent link">&para;</a></h2>
+<p>Nos capítulos anteriores, vimos como estruturar dados complexos com <a href="../cap05/">structs</a> e como gerenciar memória dinamicamente usando <a href="../cap06/">ponteiros</a>. Também arranhamos a superfície de dividir o código em múltiplos arquivos no <a href="../cap03/">Capítulo 3</a>. Agora, vamos entender a fundo o processo de <strong>compilação separada</strong> e como o C interage com <strong>bibliotecas externas</strong> do mundo real, comparando esses mecanismos com o que acontece em Python e em JavaScript.</p>
+<div class="admonition note">
+<p class="admonition-title">O processo por trás da mágica</p>
+<p>Em Python ou JavaScript, quando você quer usar uma biblioteca, basta um comando (<code>pip install</code> ou <code>npm install</code>) e uma linha no código (<code>import</code> ou <code>require</code>). Em C, não existe um gerenciador de pacotes universal e embutido na linguagem. O C nos obriga a entender as etapas físicas que o código atravessa até virar um executável. Embora isso dê mais trabalho, nos dá um controle total sobre o consumo de memória e a performance do programa.</p>
+</div>
+<hr />
+<h3 id="71-como-funciona-o-processo-de-compilacao-em-c">7.1. Como funciona o processo de compilação em C<a class="headerlink" href="#71-como-funciona-o-processo-de-compilacao-em-c" title="Permanent link">&para;</a></h3>
+<p>Diferente de Python (que é interpretado linha a linha em tempo de execução) e de VisuAlg (que executa o pseudocódigo diretamente em seu próprio ambiente), o C traduz seus arquivos fonte para código de máquina antes de rodar. Esse processo não acontece de uma vez só; ele é dividido em quatro etapas distintas:</p>
+<pre class="mermaid"><code>graph TD
+    A[Código Fonte .c] --&gt;|1. Pré-processador| B[Código Expandido .i]
+    B --&gt;|2. Compilador| C[Código Assembly .s]
+    C --&gt;|3. Montador / Assembler| D[Código de Objeto .o]
+    D --&gt;|4. Ligador / Linker| E[Executável Final]
+    F[Bibliotecas do Sistema / Outros .o] --&gt;|4. Ligador / Linker| E</code></pre>
+<ol>
+<li><strong>Pré-processamento</strong>: O pré-processador processa as diretivas que começam com <code>#</code> (como <code>#include</code> e <code>#define</code>). Ele essencialmente "copia e cola" o conteúdo dos arquivos de cabeçalho (<code>.h</code>) no topo do arquivo <code>.c</code> e substitui as macros. O resultado é um código C puro intermediário (geralmente oculto, com extensão <code>.i</code>).</li>
+<li><strong>Compilação</strong>: O compilador traduz o código C expandido para linguagem assembly específica da arquitetura do seu processador (gerando arquivos <code>.s</code>).</li>
+<li><strong>Montagem (Assembly)</strong>: O montador traduz o código assembly em código de máquina binário. O resultado é um <strong>arquivo de objeto</strong> (geralmente com extensão <code>.o</code> no Linux/macOS ou <code>.obj</code> no Windows). O arquivo de objeto contém o código binário das suas funções, mas ainda não sabe onde estão as funções de outros arquivos que ele chama (elas ficam marcadas como "endereços pendentes").</li>
+<li><strong>Ligação (Linking)</strong>: O ligador (<em>linker</em>) junta todos os arquivos de objeto (<code>.o</code>) do seu projeto com o código de máquina de bibliotecas pré-compiladas (como a biblioteca padrão do C, <code>libc</code>) para resolver todos os endereços pendentes e gerar o arquivo executável final.</li>
+</ol>
+<div class="admonition tip">
+<p class="admonition-title">Observando o processo com o GCC</p>
+<p>Você pode pedir para o <code>gcc</code> manter todos os arquivos intermediários criados durante a compilação de um arquivo <code>main.c</code> com a tag <code>--save-temps</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>gcc<span class="w"> </span>--save-temps<span class="w"> </span>main.c<span class="w"> </span>-o<span class="w"> </span>main
+</code></pre></div>
+Isso gerará no seu diretório os arquivos <code>main.i</code> (código pré-processado), <code>main.s</code> (código em assembly) e <code>main.o</code> (código de objeto), além do executável <code>main</code>.</p>
+</div>
+<hr />
+<h3 id="72-compilacao-separada-na-pratica-exemplo-da-conta-bancaria">7.2. Compilação separada na prática: exemplo da conta bancária<a class="headerlink" href="#72-compilacao-separada-na-pratica-exemplo-da-conta-bancaria" title="Permanent link">&para;</a></h3>
+<p>Para entender a compilação separada, vamos criar um sistema simples de <strong>Conta Bancária</strong> dividido em três arquivos:</p>
+<ol>
+<li><code>conta.h</code>: Contém a definição da estrutura de dados (<a href="../cap05/">struct</a>) e os protótipos das funções (a "interface" da biblioteca).</li>
+<li><code>conta.c</code>: Contém a implementação real das funções da conta bancária (o "corpo" do código).</li>
+<li><code>main.c</code>: O programa principal que utiliza a conta bancária para realizar operações.</li>
+</ol>
+<h4 id="1-o-cabecalho-contah">1. O cabeçalho: <code>conta.h</code><a class="headerlink" href="#1-o-cabecalho-contah" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#ifndef CONTA_H</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="cp">#define CONTA_H</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">numero</span><span class="p">;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">saldo</span><span class="p">;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">}</span><span class="w"> </span><span class="n">ContaBancaria</span><span class="p">;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1">// Protótipos das funções</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="kt">void</span><span class="w"> </span><span class="nf">inicializar</span><span class="p">(</span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numero</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">saldo_inicial</span><span class="p">);</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="kt">void</span><span class="w"> </span><span class="nf">depositar</span><span class="p">(</span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">valor</span><span class="p">);</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="kt">int</span><span class="w"> </span><span class="nf">sacar</span><span class="p">(</span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">valor</span><span class="p">);</span><span class="w"> </span><span class="c1">// Retorna 1 se sucesso, 0 se saldo insuficiente</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="kt">void</span><span class="w"> </span><span class="nf">exibir</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">);</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="cp">#endif</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Guardas de Inclusão (#ifndef, #define, #endif)</p>
+<p>As diretivas <code>#ifndef CONTA_H</code>, <code>#define CONTA_H</code> e <code>#endif</code> são chamadas de <strong>guardas de inclusão</strong> (header guards). Elas garantem que, mesmo que <code>conta.h</code> seja incluído múltiplas vezes no mesmo projeto (por exemplo, se <code>main.c</code> incluir <code>conta.h</code> e outra biblioteca também o fizer), o compilador não tentará ler e declarar a estrutura <code>ContaBancaria</code> duas vezes, o que geraria um erro de "redefinição de tipo".</p>
+</div>
+<h4 id="2-a-implementacao-contac">2. A implementação: <code>conta.c</code><a class="headerlink" href="#2-a-implementacao-contac" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;conta.h&quot;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kt">void</span><span class="w"> </span><span class="nf">inicializar</span><span class="p">(</span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">numero</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">saldo_inicial</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">numero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">numero</span><span class="p">;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">saldo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">saldo_inicial</span><span class="p">;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="kt">void</span><span class="w"> </span><span class="nf">depositar</span><span class="p">(</span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">valor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">valor</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">saldo</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">valor</span><span class="p">;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="p">}</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="kt">int</span><span class="w"> </span><span class="nf">sacar</span><span class="p">(</span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">valor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">valor</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">saldo</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">valor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">saldo</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">valor</span><span class="p">;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Sucesso</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// Saldo insuficiente ou valor inválido</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="p">}</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="kt">void</span><span class="w"> </span><span class="nf">exibir</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ContaBancaria</span><span class="w"> </span><span class="o">*</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Conta: %d | Saldo: R$ %.2f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">numero</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="o">-&gt;</span><span class="n">saldo</span><span class="p">);</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">O <code>const</code> antes do ponteiro</p>
+<p>Repare no <code>const</code> antes de <code>ContaBancaria *c</code> no protótipo de <code>exibir</code>. Isso é uma promessa ao compilador: esta função só vai <em>ler</em> os campos de <code>c</code> através do ponteiro, nunca alterá-los. Se o corpo da função tentar fazer <code>c-&gt;saldo = 0;</code>, o compilador recusa a compilação. É uma forma de deixar explícito, só pela assinatura da função, que ela não modifica o struct original — parecido com o que fizemos na Seção 5.2 ao decidir entre receber um struct por valor ou por ponteiro, só que aqui pedimos o "melhor dos dois mundos": a eficiência de passar só um endereço, sem o risco de alterar o original.</p>
+</div>
+<h4 id="3-o-programa-principal-mainc">3. O programa principal: <code>main.c</code><a class="headerlink" href="#3-o-programa-principal-mainc" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;conta.h&quot;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="n">ContaBancaria</span><span class="w"> </span><span class="n">minha_conta</span><span class="p">;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="c1">// Inicialização (passando o endereço via ponteiro)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="n">inicializar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minha_conta</span><span class="p">,</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w"> </span><span class="mf">500.0</span><span class="p">);</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="n">exibir</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minha_conta</span><span class="p">);</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="n">depositar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minha_conta</span><span class="p">,</span><span class="w"> </span><span class="mf">150.0</span><span class="p">);</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="n">exibir</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minha_conta</span><span class="p">);</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sacar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minha_conta</span><span class="p">,</span><span class="w"> </span><span class="mf">200.0</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Saque de R$ 200.00 realizado com sucesso!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Falha no saque: saldo insuficiente!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="n">exibir</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minha_conta</span><span class="p">);</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="p">}</span>
+</code></pre></div>
+<h4 id="compilando-e-linkando-passo-a-passo">Compilando e linkando passo a passo<a class="headerlink" href="#compilando-e-linkando-passo-a-passo" title="Permanent link">&para;</a></h4>
+<p>Em vez de compilar tudo de uma vez com <code>gcc main.c conta.c -o programa</code>, podemos realizar a compilação separada. Isso é crucial para grandes projetos, pois se você alterar apenas o <code>main.c</code>, não precisa recompilar o <code>conta.c</code> inteiro novamente:</p>
+<ol>
+<li>
+<p><strong>Compilar <code>conta.c</code> em arquivo de objeto (<code>conta.o</code>)</strong>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>gcc<span class="w"> </span>-c<span class="w"> </span>conta.c<span class="w"> </span>-o<span class="w"> </span>conta.o
+</code></pre></div>
+   <em>A tag <code>-c</code> diz ao compilador para parar após a etapa de montagem, ou seja, gerar o <code>.o</code> sem tentar rodar o linker.</em></p>
+</li>
+<li>
+<p><strong>Compilar <code>main.c</code> em arquivo de objeto (<code>main.o</code>)</strong>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>gcc<span class="w"> </span>-c<span class="w"> </span>main.c<span class="w"> </span>-o<span class="w"> </span>main.o
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Linkar os objetos para gerar o executável final</strong>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>gcc<span class="w"> </span>conta.o<span class="w"> </span>main.o<span class="w"> </span>-o<span class="w"> </span>programa
+</code></pre></div>
+   <em>O linker junta <code>conta.o</code> e <code>main.o</code> e resolve as chamadas das funções (<code>inicializar</code>, <code>depositar</code>, etc.) que <code>main</code> usou.</em></p>
+</li>
+</ol>
+<h4 id="automatizando-com-make-e-makefile">Automatizando com <code>make</code> e <code>Makefile</code><a class="headerlink" href="#automatizando-com-make-e-makefile" title="Permanent link">&para;</a></h4>
+<p>Digitar esses comandos manualmente no terminal toda vez que alteramos o código é cansativo e sujeito a erros — principalmente quando o projeto cresce e passa a ter dezenas de arquivos <code>.c</code>.</p>
+<p>Para automatizar isso, o mundo C utiliza uma ferramenta chamada <strong><code>make</code></strong>, que lê as instruções de um arquivo chamado <strong><code>Makefile</code></strong> (sem extensão). O <code>Makefile</code> define <strong>regras</strong> de compilação e as <strong>dependências</strong> de cada arquivo.</p>
+<p>Aqui está um <code>Makefile</code> simples para o nosso projeto da Conta Bancária:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c"># Makefile para o projeto Conta Bancaria</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c"># Regra padrão: gera o executável &#39;programa&#39;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c"># Depende de conta.o e main.o</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nf">programa</span><span class="o">:</span><span class="w"> </span><span class="n">conta</span>.<span class="n">o</span> <span class="n">main</span>.<span class="n">o</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span>gcc<span class="w"> </span>conta.o<span class="w"> </span>main.o<span class="w"> </span>-o<span class="w"> </span>programa
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c"># Regra para gerar conta.o</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c"># Depende de conta.c e conta.h</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="nf">conta.o</span><span class="o">:</span><span class="w"> </span><span class="n">conta</span>.<span class="n">c</span> <span class="n">conta</span>.<span class="n">h</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span>gcc<span class="w"> </span>-c<span class="w"> </span>conta.c<span class="w"> </span>-o<span class="w"> </span>conta.o
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="c"># Regra para gerar main.o</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="c"># Depende de main.c e conta.h</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="nf">main.o</span><span class="o">:</span><span class="w"> </span><span class="n">main</span>.<span class="n">c</span> <span class="n">conta</span>.<span class="n">h</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span>gcc<span class="w"> </span>-c<span class="w"> </span>main.c<span class="w"> </span>-o<span class="w"> </span>main.o
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="c"># Regra utilitária para limpar arquivos de compilação</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="nf">clean</span><span class="o">:</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span>rm<span class="w"> </span>-f<span class="w"> </span>*.o<span class="w"> </span>programa
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Atenção com a indentação no Makefile</p>
+<p>No <code>Makefile</code>, a linha com o comando de compilação (ex: <code>gcc ...</code>) <strong>deve</strong> começar com um caractere de tabulação real (<strong>Tab</strong>), e não com espaços. O uso de espaços gera o clássico erro <code>Makefile:*** missing separator. Stop.</code>.</p>
+</div>
+<p>Agora, em vez de digitar os comandos um a um, você só precisa digitar no terminal:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>make
+</code></pre></div>
+<p>O <code>make</code> é inteligente: ele compara a data de modificação dos arquivos fonte com a dos arquivos de objeto <code>.o</code>. Se você alterar apenas o <code>main.c</code> e rodar <code>make</code> novamente, ele sabe que <code>conta.o</code> ainda está atualizado e <strong>recompila apenas o <code>main.c</code></strong> antes de linkar.</p>
+<p>Para apagar os arquivos temporários criados, basta rodar:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>make<span class="w"> </span>clean
+</code></pre></div>
+<p>Como o Python gerencia seu próprio cache de bytecode pré-compilado (os arquivos <code>.pyc</code> dentro da pasta <code>__pycache__</code>) de forma totalmente automática, desenvolvedores Python quase nunca precisam configurar ferramentas como o <code>make</code> para o ciclo básico de compilação.</p>
+<hr />
+<h3 id="73-comparacao-com-python-e-visualg">7.3. Comparação com Python e VisuAlg<a class="headerlink" href="#73-comparacao-com-python-e-visualg" title="Permanent link">&para;</a></h3>
+<p>Vamos ver como o mesmo exemplo da conta bancária se comportaria nas linguagens de comparação.</p>
+<h4 id="visualg">VisuAlg<a class="headerlink" href="#visualg" title="Permanent link">&para;</a></h4>
+<p>No VisuAlg, não existe modularização física em múltiplos arquivos. Todo o código do registro e suas sub-rotinas precisam estar contidos em um único arquivo <code>.alg</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>algoritmo &quot;ContaBancaria&quot;
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>tipo
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    Conta = registro
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        numero: inteiro
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        saldo: real
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    fimregistro
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>var
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    minha_conta: Conta
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    sucesso: logico
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>procedimento inicializar(var c: Conta; num: inteiro; sal: real)
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>inicio
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>    c.numero &lt;- num
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    c.saldo &lt;- sal
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>fimprocedimento
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>procedimento depositar(var c: Conta; valor: real)
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>inicio
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>    se valor &gt; 0 entao
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>        c.saldo &lt;- c.saldo + valor
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>    fimse
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>fimprocedimento
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>funcao sacar(var c: Conta; valor: real): logico
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>inicio
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a>    se (valor &gt; 0) e (c.saldo &gt;= valor) entao
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>        c.saldo &lt;- c.saldo - valor
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>        retorne verdadeiro
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>    senao
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>        retorne falso
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>    fimse
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>fimfuncao
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>procedimento exibir(c: Conta)
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>inicio
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>    escreval(&quot;Conta: &quot;, c.numero, &quot; | Saldo: R$ &quot;, c.saldo:0:2)
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>fimprocedimento
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>inicio
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>    inicializar(minha_conta, 1234, 500.0)
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>    exibir(minha_conta)
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>    depositar(minha_conta, 150.0)
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>    exibir(minha_conta)
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>    sucesso &lt;- sacar(minha_conta, 200.0)
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>    se sucesso entao
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a>        escreval(&quot;Saque de R$ 200.00 realizado com sucesso!&quot;)
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>    senao
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>        escreval(&quot;Falha no saque: saldo insuficiente!&quot;)
+<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>    fimse
+<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>    exibir(minha_conta)
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>fimalgoritmo
+</code></pre></div>
+<h4 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h4>
+<p>Em Python, a modularização é natural e usa orientação a objetos. Criamos o arquivo <code>conta.py</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">ContaBancaria</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numero</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">saldo_inicial</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">numero</span> <span class="o">=</span> <span class="n">numero</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">saldo</span> <span class="o">=</span> <span class="n">saldo_inicial</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">depositar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valor</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        <span class="k">if</span> <span class="n">valor</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">saldo</span> <span class="o">+=</span> <span class="n">valor</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">sacar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valor</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>        <span class="k">if</span> <span class="n">valor</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">saldo</span> <span class="o">&gt;=</span> <span class="n">valor</span><span class="p">:</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>            <span class="bp">self</span><span class="o">.</span><span class="n">saldo</span> <span class="o">-=</span> <span class="n">valor</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>            <span class="k">return</span> <span class="kc">True</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exibir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conta: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">numero</span><span class="si">}</span><span class="s2"> | Saldo: R$ </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">saldo</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>E no arquivo <code>main.py</code>, nós importamos a classe:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">conta</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContaBancaria</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">minha_conta</span> <span class="o">=</span> <span class="n">ContaBancaria</span><span class="p">(</span><span class="mi">1234</span><span class="p">,</span> <span class="mf">500.0</span><span class="p">)</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">minha_conta</span><span class="o">.</span><span class="n">exibir</span><span class="p">()</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">minha_conta</span><span class="o">.</span><span class="n">depositar</span><span class="p">(</span><span class="mf">150.0</span><span class="p">)</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">minha_conta</span><span class="o">.</span><span class="n">exibir</span><span class="p">()</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="k">if</span> <span class="n">minha_conta</span><span class="o">.</span><span class="n">sacar</span><span class="p">(</span><span class="mf">200.0</span><span class="p">):</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saque de R$ 200.00 realizado com sucesso!&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Falha no saque: saldo insuficiente!&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="n">minha_conta</span><span class="o">.</span><span class="n">exibir</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="diferencas-no-ciclo-de-vida">Diferenças no ciclo de vida<a class="headerlink" href="#diferencas-no-ciclo-de-vida" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>C</th>
+<th>Python</th>
+<th>VisuAlg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Formato de entrega</strong></td>
+<td>Executável compilado binário (<code>programa</code>)</td>
+<td>Código fonte <code>.py</code> ou bytecode pré-compilado <code>.pyc</code></td>
+<td>Arquivo único de texto <code>.alg</code></td>
+</tr>
+<tr>
+<td><strong>Passo de Linkagem</strong></td>
+<td>Manual ou gerido por Makefile/CMake</td>
+<td>Automático e dinâmico em tempo de execução</td>
+<td>Inexistente (tudo no mesmo arquivo)</td>
+</tr>
+<tr>
+<td><strong>Detecção de Erros</strong></td>
+<td>Erros de digitação de funções são pegos na compilação ou linkagem</td>
+<td>Erros de digitação de funções só dão erro quando a linha é executada (<em>NameError</em>)</td>
+<td>Pegos na verificação de sintaxe antes de rodar</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 7.1</p>
+<p>Se você alterar apenas o corpo da função <code>depositar</code> no arquivo <code>conta.c</code> para cobrar uma taxa de R$ 0.10 a cada depósito, quais arquivos precisam ser recompilados (usando a tag <code>-c</code>) e quais precisam ser linkados novamente para atualizar o executável final? Responda sem rodar os comandos.</p>
+</div>
+<hr />
+<h3 id="74-bibliotecas-externas-c-vs-python-vs-javascript">7.4. Bibliotecas externas: C vs Python vs JavaScript<a class="headerlink" href="#74-bibliotecas-externas-c-vs-python-vs-javascript" title="Permanent link">&para;</a></h3>
+<p>No desenvolvimento moderno, raramente escrevemos tudo do zero. Usamos bibliotecas criadas por terceiros. Vamos ver a diferença brutal de como cada ecossistema lida com isso.</p>
+<h4 id="python-pip">Python (<code>pip</code>)<a class="headerlink" href="#python-pip" title="Permanent link">&para;</a></h4>
+<p>Em Python, instalamos bibliotecas a partir do repositório central PyPI usando o <code>pip</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>pip<span class="w"> </span>install<span class="w"> </span>requests
+</code></pre></div>
+O pacote é baixado para a sua pasta de ambiente virtual (<code>.venv</code>) ou global do sistema. Ao rodar <code>import requests</code>, o interpretador Python sabe exatamente em qual diretório procurar a biblioteca instalada e a carrega dinamicamente. Você não precisa passar nenhuma configuração de compilação adicional ao rodar seu código.</p>
+<h4 id="javascript-nodejs-npm">JavaScript / Node.js (<code>npm</code>)<a class="headerlink" href="#javascript-nodejs-npm" title="Permanent link">&para;</a></h4>
+<p>Em JavaScript/Node.js, instalamos via <code>npm</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>npm<span class="w"> </span>install<span class="w"> </span>axios
+</code></pre></div>
+A biblioteca é baixada para a pasta <code>node_modules</code> local do projeto. Quando fazemos <code>import axios from 'axios'</code> ou <code>require('axios')</code>, o NodeJS resolve a dependência procurando recursivamente na pasta <code>node_modules</code>. Toda a resolução de caminho é abstraída pelo runtime.</p>
+<h4 id="c-compilacao-e-linkagem-manual-com-tags">C (compilação e linkagem manual com tags)<a class="headerlink" href="#c-compilacao-e-linkagem-manual-com-tags" title="Permanent link">&para;</a></h4>
+<p>Em C, as coisas são mais primitivas e próximas do sistema operacional. Se quisermos usar uma biblioteca externa (como a biblioteca do PostgreSQL <code>libpq</code> ou o driver do MongoDB <code>libmongoc</code>), o processo costuma ser:</p>
+<ol>
+<li>
+<p><strong>Instalar os arquivos de desenvolvimento no sistema</strong>:
+   No Linux Debian/Ubuntu, isso é feito via gerenciador de pacotes do sistema (apt), instalando os pacotes <code>-dev</code> (que contêm os cabeçalhos <code>.h</code> e arquivos de linkagem):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libpq-dev
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libmongoc-dev
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Dizer ao compilador onde achar os arquivos</strong>:
+   Para compilar o código C, precisamos dizer ao compilador:</p>
+</li>
+<li><strong>Onde estão os arquivos de cabeçalho (<code>.h</code>)</strong>: usando a tag <code>-I</code> (Include). Por padrão, o GCC busca em <code>/usr/include</code>, mas se a biblioteca estiver em outro local, você precisa de <code>-I/caminho/para/headers</code>.</li>
+<li><strong>Onde estão os arquivos binários da biblioteca (<code>.so</code> ou <code>.a</code>)</strong>: usando a tag <code>-L</code> (Library path), por exemplo <code>-L/usr/lib</code>.</li>
+<li><strong>Qual é o nome da biblioteca que queremos linkar</strong>: usando a tag <code>-l</code> (link), por exemplo <code>-lpq</code> (para o PostgreSQL) ou <code>-lmongoc-1.0</code> (para o MongoDB).</li>
+</ol>
+<p>Abaixo está o exemplo conceitual de como o compilador precisa receber essas tags:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>gcc<span class="w"> </span>-I/usr/include/postgresql<span class="w"> </span>exemplopq.c<span class="w"> </span>-o<span class="w"> </span>programa<span class="w"> </span>-L/usr/lib/postgresql<span class="w"> </span>-lpq
+</code></pre></div>
+<h4 id="o-salvador-pkg-config">O salvador: <code>pkg-config</code><a class="headerlink" href="#o-salvador-pkg-config" title="Permanent link">&para;</a></h4>
+<p>Decorar todos os caminhos de cabeçalhos e nomes de bibliotecas de terceiros no sistema é impraticável. Para resolver isso, usamos uma ferramenta utilitária chamada <code>pkg-config</code>. Ela consulta a instalação da biblioteca no sistema e imprime as tags corretas para o compilador:</p>
+<ul>
+<li>Para ver as tags de inclusão de cabeçalho (Cflags):
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>pkg-config<span class="w"> </span>--cflags<span class="w"> </span>libpq
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># Saída típica: -I/usr/include/postgresql</span>
+</code></pre></div></li>
+<li>Para ver as tags de linkagem (Libs):
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>pkg-config<span class="w"> </span>--libs<span class="w"> </span>libpq
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="c1"># Saída típica: -lpq</span>
+</code></pre></div></li>
+</ul>
+<p>Podemos injetar a saída do <code>pkg-config</code> diretamente no comando do GCC usando crases (backticks) ou a sintaxe <code>$()</code> do terminal bash:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>gcc<span class="w"> </span><span class="k">$(</span>pkg-config<span class="w"> </span>--cflags<span class="w"> </span>libpq<span class="k">)</span><span class="w"> </span>exemplopq.c<span class="w"> </span>-o<span class="w"> </span>programa<span class="w"> </span><span class="k">$(</span>pkg-config<span class="w"> </span>--libs<span class="w"> </span>libpq<span class="k">)</span>
+</code></pre></div>
+<p>Isso torna o processo de compilação com bibliotecas externas muito mais portátil, já que o <code>pkg-config</code> descobrirá os caminhos corretos independentemente de o sistema ser Ubuntu, Fedora ou macOS.</p>
+<hr />
+<h3 id="75-lista-de-exercicios">7.5. Lista de exercícios<a class="headerlink" href="#75-lista-de-exercicios" title="Permanent link">&para;</a></h3>
+<h4 id="conceituais">Conceituais<a class="headerlink" href="#conceituais" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Explique, com suas palavras, qual a diferença entre um arquivo de cabeçalho (<code>.h</code>) e um arquivo de código fonte (<code>.c</code>). Por que não devemos escrever o corpo das funções dentro de um arquivo <code>.h</code>?</li>
+<li>O que acontece na etapa de <strong>Ligação (Linking)</strong> no processo de compilação do C? Que tipo de erro o linker gera se você declarar um protótipo de função em um <code>.h</code>, incluí-lo no <code>main.c</code>, mas esquecer de compilar/linkar o arquivo <code>.c</code> correspondente que define a função?</li>
+<li>Explique a diferença de como o Python e o C resolvem o acesso às funções de uma biblioteca externa instalada no sistema.</li>
+<li>Por que usamos guardas de inclusão (<code>#ifndef</code>, <code>#define</code>, <code>#endif</code>) em arquivos <code>.h</code>? Dê um exemplo do problema que ocorreria se não os usássemos.</li>
+</ol>
+<h4 id="programacao">Programação<a class="headerlink" href="#programacao" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Crie um pequeno módulo de operações geométricas em C composto por:</li>
+<li><code>geometria.h</code>: Contém a constante <code>PI</code> (via <code>#define</code>) e os protótipos de <code>double calcular_area_circulo(double raio)</code> e <code>double calcular_perimetro_circulo(double raio)</code>.</li>
+<li><code>geometria.c</code>: A implementação das duas funções.</li>
+<li><code>main.c</code>: Lê o raio do usuário, chama as funções e imprime os resultados.
+   Escreva no topo do arquivo <code>main.c</code>, como comentário, os comandos do GCC para compilar separadamente <code>geometria.c</code> e <code>main.c</code> em arquivos de objeto <code>.o</code>, e depois o comando para gerar o executável final <code>circulo</code>.</li>
+<li>Considere o arquivo de cabeçalho abaixo (<code>calculadora.h</code>):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="cp">#ifndef CALCULADORA_H</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="cp">#define CALCULADORA_H</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="kt">int</span><span class="w"> </span><span class="nf">somar</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="kt">int</span><span class="w"> </span><span class="nf">subtrair</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="kt">int</span><span class="w"> </span><span class="nf">multiplicar</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="kt">double</span><span class="w"> </span><span class="nf">dividir</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">);</span><span class="w"> </span><span class="c1">// Retorna 0.0 se b for zero</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="cp">#endif</span>
+</code></pre></div>
+   Escreva o arquivo <code>calculadora.c</code> correspondente com as implementações e crie um arquivo <code>main.c</code> que use e teste todas as funções da calculadora. Faça a compilação de forma separada em seu terminal.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

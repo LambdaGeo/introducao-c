@@ -1,0 +1,1284 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Adaptado de 'C for Python Programmers' (Carl Burch / Elizabeth Patitsas), ampliado com comparações e exercícios de mapeamento Python/VisuAlg → C.">
+      
+      
+        <meta name="author" content="Sergio Costa">
+      
+      
+      
+        <link rel="prev" href="../cap01/">
+      
+      
+        <link rel="next" href="../cap03/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>2. Expressões e comandos - C para Programadores Python e VisuAlg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#2-expressoes-e-comandos" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-header__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C para Programadores Python e VisuAlg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2. Expressões e comandos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-nav__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    C para Programadores Python e VisuAlg
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Construindo um simples programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Expressões e comandos
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Expressões e comandos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2-expressoes-e-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Expressões e comandos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Expressões e comandos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-operadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Operadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-tipos-basicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Tipos básicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-chaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Chaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Comandos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-comentarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6. Comentários
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Bibliotecas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Vetores e Strings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Structs (registros)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Ponteiros e Alocação Dinâmica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Compilação Separada e Bibliotecas Externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conclusao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusão e Próximos Passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#2-expressoes-e-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Expressões e comandos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Expressões e comandos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-operadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Operadores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-tipos-basicos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Tipos básicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-chaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Chaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-comandos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Comandos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. Arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-comentarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6. Comentários
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>2. Expressões e comandos</h1>
+
+<h2 id="2-expressoes-e-comandos">2. Expressões e comandos<a class="headerlink" href="#2-expressoes-e-comandos" title="Permanent link">&para;</a></h2>
+<p>Agora que vimos como construir um programa completo, vamos aprender o universo do que podemos fazer dentro de uma função C, executando através de diferentes tipos de comandos.</p>
+<h3 id="21-operadores">2.1. Operadores<a class="headerlink" href="#21-operadores" title="Permanent link">&para;</a></h3>
+<p>Um operador é algo que podemos usar em expressões aritméticas, como um sinal de mais '+' ou um teste de igualdade '=='. Os operadores da linguagem C parecerão familiares, pois o designer da Python, Guido van Rossum, utilizou como referência esses operadores; mas existem algumas diferenças significativas — e o VisuAlg, por sua vez, fica em um meio-termo, mais próximo do Python nesse ponto.</p>
+<blockquote>
+<p>C operator precedence</p>
+<p><code>++ --</code> (postfix)<br />
+<code>+ - !</code> (unário)<br />
+<code>* / %</code><br />
+<code>+ -</code> (binário)<br />
+<code>&lt; &gt; &lt;= &gt;=</code><br />
+<code>== !=</code><br />
+<code>&amp;&amp;</code><br />
+<code>||</code><br />
+<code>= += -= *= /= %=</code></p>
+<p>Python operator precedence
+<code>`</code>+ -<code>(unary)</code>* / % //<code></code>+ -<code>(binary)</code>&lt; &gt; &lt;= &gt;= == !=<code></code>not<code></code>and<code></code>or`</p>
+<p>VisuAlg operator precedence</p>
+<p><code>+ -</code> (unário), <code>nao</code><br />
+<code>^</code> (potência)<br />
+<code>* / div mod</code><br />
+<code>+ -</code> (binário)<br />
+<code>&lt; &gt; &lt;= &gt;= = &lt;&gt;</code><br />
+<code>e</code><br />
+<code>ou</code></p>
+</blockquote>
+<p>Algumas distinções importantes:</p>
+<ul>
+<li>
+<p>C não possui um operador de exponenciação como o operador <code>**</code> do Python. Para exponenciação em C, você deverá usar uma função de biblioteca denominada <code>pow ()</code>. Por exemplo, <code>pow (1.1, 2.0)</code> calcula 1.1². O VisuAlg, por outro lado, tem um operador de potência próprio, o <code>^</code> — nesse ponto ele é mais parecido com Python do que com C: <code>1.1 ^ 2</code> calcula a mesma coisa.</p>
+</li>
+<li>
+<p>C usa símbolos em vez de palavras para as operações booleanas AND (<code>&amp;&amp;</code>), OR (<code>||</code>) e NOT (<code>!</code>). O VisuAlg, assim como Python, usa palavras: <code>e</code>, <code>ou</code> e <code>nao</code>.</p>
+</li>
+<li>
+<p>O nível de precedência de NOT (o operador <code>!</code>) É muito alto em C. Isso quase nunca é desejado, então você acaba precisando de parênteses na maioria das vezes quer for usar o operador <code>!</code>.</p>
+</li>
+<li>
+<p>C define a atribuição como um operador, enquanto o Python define a atribuição como um comando. O valor do operador de atribuição é o valor atribuído. Uma consequência do design de C é que uma atribuição pode legalmente ser parte de outra declaração.</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getchar</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EOF</span><span class="p">)</span>
+</code></pre></div>
+<p>Aqui, nós atribuímos o valor retornado por <code>getchar ()</code> à variável <code>a</code>, e então testamos se o valor atribuído a<code>a</code> corresponde à constante <code>EOF</code>, que é usada para decidir se deve repetir o loop novamente . Muitas pessoas afirmam que esse estilo de programação é extraordinariamente ruim; outros acham muito conveniente evitar. O Python, é claro, foi projetado de modo que uma atribuição deva ocorrer como sua própria instrução separada, portanto, as atribuições dentro de uma condição de um comando <code>while</code> é ilegal no Python. <strong>O VisuAlg segue a mesma regra do Python aqui</strong>: <code>&lt;-</code> é um comando, não um operador, então você também não consegue escrever algo como <code>enquanto ((a &lt;- leia()) &lt;&gt; -1) faca</code> em VisuAlg.</p>
+<ul>
+<li>
+<p>Os operadores <code>++</code> e <code>--</code> são para incrementar e decrementar uma variável. Assim, a declaração <code>i ++</code> é uma forma mais curta da declaração <code>i = i + 1</code> (ou<code>i + = 1</code> ). <strong>Nem Python nem VisuAlg têm esses operadores.</strong> Em Python você escreve <code>i += 1</code>; em VisuAlg, nem <code>+=</code> existe — o único jeito é por extenso: <code>i &lt;- i + 1</code>.</p>
+</li>
+<li>
+<p>O operador de divisão <code>/</code> realiza uma divisão inteira se ambos operandos forem do tipo <code>int</code>; isto é, qualquer resto é ignorado com tal divisão. Assim, em C, a expressão <code>13 / 5</code> é avaliada como 2, enquanto <code>13 / 5.0</code> é 2.6: A primeira tem valores inteiros como operandos de ambos lados, enquanto a segunda tem um número de ponto flutuante à direita.</p>
+<blockquote>
+<p>Por outro lado, com versões mais recentes do Python (3.0 e posterior), o operador de barra única sempre faz a divisão de ponto flutuante. Com versões mais antigas do Python, o operador single-slash funcionava como o C, mas isso muitas vezes levava a bugs - em parte porque o tipo associado a uma variável não é fixo como está em um programa em C.</p>
+</blockquote>
+<p>O VisuAlg resolve essa ambiguidade tendo dois operadores diferentes desde o início: <code>/</code> sempre faz divisão real (como o <code>/</code> do Python 3), e <code>div</code> faz divisão inteira (como o <code>//</code> do Python). O resto da divisão é <code>%</code> em C e Python, e <code>mod</code> em VisuAlg.</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C</th>
+<th>VisuAlg</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>divisão sempre real</td>
+<td><code>/</code> (se algum operando for <code>float</code>/<code>double</code>)</td>
+<td><code>/</code></td>
+<td><code>/</code></td>
+</tr>
+<tr>
+<td>divisão inteira</td>
+<td><code>/</code> (se ambos operandos forem <code>int</code>)</td>
+<td><code>div</code></td>
+<td><code>//</code></td>
+</tr>
+<tr>
+<td>resto da divisão</td>
+<td><code>%</code></td>
+<td><code>mod</code></td>
+<td><code>%</code></td>
+</tr>
+<tr>
+<td>potência</td>
+<td><code>pow(x, y)</code></td>
+<td><code>x ^ y</code></td>
+<td><code>x ** y</code></td>
+</tr>
+<tr>
+<td>e / ou / não lógico</td>
+<td><code>&amp;&amp; \|\| !</code></td>
+<td><code>e</code> <code>ou</code> <code>nao</code></td>
+<td><code>and</code> <code>or</code> <code>not</code></td>
+</tr>
+<tr>
+<td>incremento</td>
+<td><code>i++</code></td>
+<td><em>(não existe)</em> <code>i &lt;- i + 1</code></td>
+<td><em>(não existe)</em> <code>i += 1</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 2.1</p>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>media &lt;- (n1 + n2 + n3) / 3
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>aprovado &lt;- media &gt;= 6 e faltas &lt;= 15
+</code></pre></div>
+<p>Escreva o trecho de C equivalente, declarando as variáveis que forem necessárias. Preste atenção especial no operador lógico "e": qual símbolo C usa no lugar da palavra <code>e</code>?</p>
+</div>
+<h3 id="22-tipos-basicos">2.2. Tipos básicos<a class="headerlink" href="#22-tipos-basicos" title="Permanent link">&para;</a></h3>
+<p>A lista de tipos de C é bastante restrita.</p>
+<ul>
+<li><code>int</code> para um inteiro</li>
+<li><code>char</code> para um único caractere</li>
+<li><code>float</code> para um número de ponto flutuante de precisão simples</li>
+<li><code>double</code> para um número de ponto flutuante de precisão dupla</li>
+</ul>
+<p>O tipo <code>int</code> é o mais simples. Você também pode criar outros tipos inteiros, usando os nomes de tipo <code>long</code> e <code>short</code>. Um <code>long</code> reserva pelo menos tantos bits quanto um <code>int</code>, enquanto um <code>short</code> reserva menos bits que um <code>int</code> (ou o mesmo número ). A linguagem não garante o número de bits para cada um, mas a maioria dos compiladores atuais usa 32 bits para um <code>int</code>, o que permite números de até 2.15 × 10<sup>9</sup>. Isso é suficiente para a maioria dos propósitos, e muitos compiladores também usam 32 bits para um <code>long</code>, então as pessoas normalmente usam o <code>int</code> em seus programas.</p>
+<p>O tipo <code>char</code> também é simples: representa um único caracter, como uma letra ou pontuação. Você pode representar um caracter individual em um programa colocando o caractere entre aspas simples: <code>digit0 = '0';</code> atribuiria o caracter zero em uma variável <code>char denominada</code> <code>digit0</code>.</p>
+<p>Dos dois tipos de ponto flutuante, <code>float</code> e <code>double</code>, a maioria dos programadores hoje utilizam quase exclusivamente o tipo <code>double</code>. Esses tipos são para números que podem ter um ponto decimal neles, como 2.5, ou para números maiores que um <code>int</code> podendo conter valores como 6.02 × 10<sup>23</sup>. Os dois tipos diferem em que um <code>float</code> normalmente utiliza apenas 32 bits de armazenamento, enquanto um <code>double</code> normalmente utiliza 64 bits. A técnica de armazenamento de 32 bits permite um intervalo de números mais estreito (−3,4 × 10<sup>38</sup> a 3,4 × 10<sup>38</sup>) e - mais problemático - cerca de 7 dígitos significativos. Um <code>float</code> não pôde armazenar um número como 281.421.906 (a população dos EUA em 2000, de acordo com o censo), porque requer nove dígitos significativos; teria que armazenar uma aproximação, como 281,421,920. Por outro lado, a técnica de armazenamento de 64 bits permite um intervalo mais amplo de números (-1,7 × 10<sup>308</sup> a 1,7 × 10<sup>308</sup>) e aproximadamente 15 dígitos significativos. Isso é mais adequado para propósitos gerais, e os 32 bits extras de armazenamento raramente valem a pena, então <code>double</code> é quase sempre preferível.</p>
+<p>VisuAlg simplifica bastante esse ponto: não existe distinção <code>float</code>/<code>double</code>, só existe <code>real</code>. Já para inteiros, é só <code>inteiro</code>, sem <code>long</code>/<code>short</code>.</p>
+<p>C não possui um tipo booleano para representar valores true / false. Isto tem implicações importantes para uma declaração como <code>if</code>, onde você precisa de um teste para determinar se deve executar o corpo. A abordagem de C é tratar o inteiro 0 como <em>false</em> e todos os outros valores inteiros como <em>true</em>. O seguinte seria um programa C legal.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;in if</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;in else</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+</code></pre></div>
+<p>Este programa compilaria, e imprimiria "in if" quando executado, desde que o valor da expressão <code>if( i)</code> seja 5, o que não é 0 e, portanto a condição seria verdadeira.</p>
+<p>Os operadores de C que parecem operar sobre valores booleanos (como <code>==</code>, <code>&amp;&amp;</code>, e <code>||</code>), na verdade, operam sobre valores inteiros. Em particular, eles computam 1 para representar <em>true</em> e 0 para representar <em>false</em>. Isso significa que você pode legitimamente digitar o seguinte para contar quantos <code>a</code>,<code>b</code> e <code>c</code> são positivos.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p>Essa peculiaridade - que C considera verdadeiros os inteiros diferentes de zero - é geralmente considerado um erro. Quando a linguagem foi desenvolvido as linguagens de máquina raramente tinham suporte direto para valores booleanos, normalmente esperava que você realize esses testes comparando-os com zero. Mas os compiladores melhoraram além do ponto em que estavam quando o C foi inventado, e agora podem facilmente traduzir comparações booleanas com código de máquina eficiente. Além do mais, esse design de C leva a programas confusos, portanto, a maioria dos programadores especialistas em C evitam usar o atalho, preferindo compará-lo explicitamente a zero como uma questão de bom estilo de programação. Mas tal prática não conserta o fato de que essa peculiaridade da linguagem geralmente leva a erros de programação. A maioria das linguagens mais novas optam por um tipo especial associado a valores booleanos. (O Python possui seu próprio tipo booleano, mas também trata 0 como falso para as instruções <code>if</code>).</p>
+<p>Aqui o VisuAlg está do lado de Python, não de C: existe um tipo <code>logico</code> de verdade, com os literais <code>verdadeiro</code> e <code>falso</code> — não dá para usar um inteiro no lugar de uma condição, como se faz (e como C permite) em <code>if (i)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>C</th>
+<th>VisuAlg</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>não existe (usa <code>int</code>, 0 = falso)</td>
+<td><code>logico</code> (<code>verdadeiro</code> / <code>falso</code>)</td>
+<td><code>bool</code> (<code>True</code> / <code>False</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-chaves">2.3. Chaves<a class="headerlink" href="#23-chaves" title="Permanent link">&para;</a></h3>
+<p>Várias declarações, como a instrução <code>if</code>, incluem um corpo que pode conter várias instruções. Normalmente, o corpo é cercado por chaves ('{' e '}') para indicar sua extensão. Mas quando o corpo possui apenas uma declaração, as chaves são opcionais. Assim, podemos encontrar o máximo de dois números sem chaves, já que o corpo de ambos, <code>if</code> e <code>else</code>, contém apenas uma única instrução.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">first</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">second</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">first</span><span class="p">;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">else</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">second</span><span class="p">;</span>
+</code></pre></div>
+<p>Nem VisuAlg nem Python têm essa flexibilidade: em Python o bloco é sempre a indentação, sem exceção; em VisuAlg, <code>entao</code>/<code>senao</code> sempre precisam do <code>fimse</code> no final, não importa se o corpo tem uma linha ou dez.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>se (first &gt; second) entao
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    max &lt;- first
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>senao
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    max &lt;- second
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>fimse
+</code></pre></div>
+<p>(Também poderíamos incluir chaves em apenas um dos dois corpos, desde que esse corpo contenha apenas uma declaração.)</p>
+<p>Os programadores C usam isso com bastante frequência quando querem que um dos vários testes <code>if</code> sejam executados. Um exemplo disso é com o código da fórmula quadrática abaixo. Podemos calcular o número de soluções da seguinte forma:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">disc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">disc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">disc</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="p">}</span>
+</code></pre></div>
+<p>Note que a cláusula <code>else</code> aqui contém apenas uma instrução (uma declaração <code>if … else</code>), então podemos omitir as chaves ao redor dela. Podemos então escrever da seguinte maneira:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">disc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">disc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="p">}</span><span class="w"> </span><span class="k">else</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">disc</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">        </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>Mas essa situação surge com freqüência suficiente para que os programadores C sigam uma regra especial de indentanção nesse caso - uma regra que permite que todos os casos sejam escritos no mesmo nível de recuo.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">disc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">disc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">disc</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="n">num_sol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="p">}</span>
+</code></pre></div>
+Como isso é viável usando as regras de chaves de C, C não inclui o conceito de uma cláusula <code>elif</code> que você encontra no Python. Você pode apenas agrupar quantas combinações <code>else if</code> que você quiser.</p>
+<p>O VisuAlg <strong>não tem</strong> esse atalho: como todo <code>se</code> exige um <code>fimse</code> correspondente, encadear várias condições sempre aninha um bloco dentro do outro, cada um com seu próprio <code>fimse</code> — não existe uma palavra equivalente a <code>elif</code>/<code>else if</code> que evite o aninhamento.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>disc &lt;- b * b - 4 * a * c
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>se (disc &lt; 0) entao
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    num_sol &lt;- 0
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>senao
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    se (disc = 0) entao
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        num_sol &lt;- 1
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    senao
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>        num_sol &lt;- 2
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>    fimse
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>fimse
+</code></pre></div>
+<p>Além desta situação particular, eu recomendo que você inclua as chaves de qualquer maneira. À medida que você continua trabalhando em um programa, você freqüentemente acha que deseja adicionar instruções adicionais no corpo de um <code>if</code>, e ter as chaves lá já lhe poupa o incômodo de adicioná-las mais tarde. E torna mais fácil manter o controle das chaves, já que cada nível de indentação requer uma chave direita de fechamento.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 2.2</p>
+<p>Em Python:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">if</span> <span class="n">idade</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">categoria</span> <span class="o">=</span> <span class="s2">&quot;crianca&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">elif</span> <span class="n">idade</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="n">categoria</span> <span class="o">=</span> <span class="s2">&quot;adolescente&quot;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="n">categoria</span> <span class="o">=</span> <span class="s2">&quot;adulto&quot;</span>
+</code></pre></div>
+<ol>
+<li>Primeiro, escreva isso em VisuAlg (repare que você vai precisar de dois <code>fimse</code>, já que não existe <code>senaose</code>/<code>elif</code>).</li>
+<li>Depois, escreva a versão em C usando o atalho <code>else if</code> mostrado acima.</li>
+</ol>
+<details class="tip">
+<summary>Dica, não gabarito</summary>
+<p>A versão em C, graças ao <code>else if</code>, fica com a mesma "forma" (mesmo número de blocos, sem aninhar) que a versão em Python — mesmo o C não tendo <code>elif</code> de verdade.</p>
+</details>
+</div>
+<h3 id="24-comandos">2.4. Comandos<a class="headerlink" href="#24-comandos" title="Permanent link">&para;</a></h3>
+<p>Vimos quatro tipos de instruções, três das quais se correlacionam de perto com o Python.</p>
+<ol>
+<li><code>int x;</code></li>
+</ol>
+<p>Nós já discutimos declarações de variáveis em <a href="../cap01/#12-declaracoes-variaveis">Seção 1.2</a>. Eles não têm paralelo no Python — mas têm paralelo direto no bloco <code>var</code> do VisuAlg.</p>
+<ol>
+<li><code>x = y + z;</code> ou <code>printf("%d", x);</code></li>
+</ol>
+<p>Você pode ter uma expressão como um comando. Tecnicamente, a expressão poderia ser <code>x + 3</code>; mas tal afirmação não tem sentido: pedimos ao computador para adicionar x e 3, mas não pedimos que nada aconteça a ele. Quase sempre, as expressões têm uma de duas formas: Uma forma é um operador que altera o valor de uma variável, como o operador de atribuição (<code>x = 3;</code>), o operador de atribuição de adição <code>+ =</code> ou o operador de incremento <code>++</code>. A outra forma de expressão que você vê como uma instrução é uma chamada de função, como uma instrução que simplesmente chama a função <code>printf ()</code>. Em VisuAlg, o equivalente de <code>x = y + z;</code> é <code>x &lt;- y + z</code>, sem ponto e vírgula.</p>
+<ol>
+<li><code>if (x &lt; 0) { printf("negative"); }</code></li>
+</ol>
+<p>Você pode ter um comando  <code>if</code>, que funciona de forma muito semelhante ao <code>if</code> do Python (e ao <code>se</code> do VisuAlg, visto na Seção 2.3). A única grande diferença é a sintaxe: Em C, uma condição da declaração if deve ser colocada entre parênteses, não há dois pontos após a condição, e o corpo tem um conjunto de chaves que a encerram.</p>
+<p>Como já vimos, C não possui uma cláusula <code>elif</code> como no Python; em vez disso, os programadores C usam a regra de chave opcional e escrevem <code>else if</code> .</p>
+<ol>
+<li><code>return 0;</code></li>
+</ol>
+<p>Você pode ter um comando <code>return</code> para sair de uma função com um determinado valor de retorno. Ou para uma função sem valor de retorno (ou seja o tipo de retorno 'void'), você escreveria simplesmente <code>return;</code>. Em VisuAlg, isso é <code>retorne valor</code>, e só existe dentro de uma <code>funcao</code> — um <code>procedimento</code> (o equivalente a uma função <code>void</code>) não usa <code>retorne</code>.</p>
+<p>Existem mais três tipos de instruções que se correlacionam de perto com os equivalentes do Python.</p>
+<ol>
+<li><code>while (i &gt;= 0) { i--; }</code></li>
+</ol>
+<p>O comando <code>while</code> funciona de forma idêntico à do Python, embora a sintaxe seja diferente da mesma maneira que a sintaxe <code>if</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">i</span><span class="o">--</span><span class="p">;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">}</span>
+</code></pre></div>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>enquanto (i &gt;= 0) faca
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    escreval(i)
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    i &lt;- i - 1
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>fimenquanto
+</code></pre></div>
+<p>Novamente, a expressão de teste requer um conjunto de parênteses em torno dela, não há cólon e usamos chaves para cercar o corpo do loop.</p>
+<ol>
+<li><code>break;</code></li>
+</ol>
+<p>Como no Python, o comando <code>break</code> sai imediatamente do loop mais interno em que ela é encontrada. Naturalmente, a declaração tem um ponto e vírgula a seguir. O equivalente em VisuAlg é a palavra <code>interrompa</code>.</p>
+<ol>
+<li><code>continue;</code></li>
+</ol>
+<p>Também como em Python, o comando <code>continue</code> pula para a parte inferior do loop mais interno no qual ele é encontrado e testa se deve repetir o loop novamente. Tem um ponto e vírgula também. <strong>Atenção</strong>: o VisuAlg <strong>não tem</strong> um comando equivalente a <code>continue</code>. Se você está acostumado a usar <code>continue</code> em Python, ao passar para C (ou para VisuAlg) esse é um bom momento para reparar que você já conhece uma alternativa sem <code>continue</code> — geralmente invertendo a condição e aninhando o resto do corpo do laço dentro de um <code>if</code>.</p>
+<ol>
+<li><code>for (i = 0; i &lt; 10; i++) {…</code></li>
+</ol>
+<p>Embora o Python também tenha um comando <code>for</code>, seu propósito e sua sintaxe possuem pouca similaridade com a declaração<code>for</code> de C. Em C, a palavra-chave <code>for</code> é seguida por um conjunto de parênteses contendo três partes separadas por ponto e vírgula.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">init</span><span class="p">;</span><span class="w"> </span><span class="n">test</span><span class="p">;</span><span class="w"> </span><span class="n">update</span><span class="p">)</span>
+</code></pre></div>
+<p>A intenção do loop <code>for</code> de C é permitir passar uma variável através de uma série de números, como a contagem de 0 a 9. A parte antes do primeiro ponto e vírgula (<em>init</em>) é executada assim que a instrução<code>for</code> é alcançada; é para inicializar a variável que contará. A parte entre os dois pontos e vírgulas (<em>test</em>) é avaliada antes de cada iteração para determinar se a iteração deve ser repetida. E a parte que segue o ponto-e-vírgula final (<em>update</em>) é avaliada no final de cada iteração para atualizar a variável de contagem para a iteração a seguir.</p>
+<p>Nesse ponto, quem já programa em VisuAlg tem uma vantagem sobre quem só programa em Python: o <code>para</code> do VisuAlg já é limitado a "andar por uma faixa de valores", exatamente como o <code>for</code> mais comum de C — só muda a sintaxe.</p>
+<p>Na prática, loops 'for' são usados com mais freqüência para contar n iterações. O idioma padrão para isso é o seguinte.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="n">comandos</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">}</span>
+</code></pre></div>
+<p>Em VisuAlg:</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>para i de 0 ate n-1 faca
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    comandos
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>fimpara
+</code></pre></div>
+Aqui temos uma variável de contador <code>i</code> cujo valor começa em 0. Com cada iteração, testamos se <code>i</code> atingiu <code>n</code> ou não; e se não tiver, então nós executamos o corpo da declaração <code>for</code> e então executamos a atualização<code>i++</code>para que <code>i</code> vá para o inteiro seguinte. O resultado é que o corpo é executado para cada valor de <code>i</code> de 0 até n - 1. Repare que o <code>para</code> do VisuAlg já inclui o limite final (<code>ate n-1</code>), então não é preciso (nem existe) uma "condição de parada" separada como em C — mais parecido, nesse ponto, com o <code>range(n)</code> do Python.</p>
+<p>Mas você também pode usar um laço <code>for</code> para outros propósitos. No exemplo a seguir, exibimos as potências de 2 até 512. Observe como a parte de atualização da declaração <code>for</code> mudou para" <code>p *= 2</code>".</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">512</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">);</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="p">}</span>
+</code></pre></div>
+<p>Esse é um bom exemplo de onde o <code>for</code> de C é <strong>mais flexível</strong> do que o <code>para</code> de VisuAlg ou o <code>for</code> de Python: como C separa init/teste/atualização como três expressões livres, a "atualização" pode ser qualquer coisa (aqui, multiplicar por 2), não apenas somar um passo fixo. Nem o <code>para ... passo ...</code> do VisuAlg nem o <code>range(inicio, fim, passo)</code> do Python conseguem expressar diretamente um passo multiplicativo — nesse caso a forma mais natural em VisuAlg (ou Python) seria reescrever como um <code>enquanto</code>/<code>while</code>.</p>
+<ol>
+<li><code>switch (conceito) { case 'A':</code>…</li>
+</ol>
+<p>O comando <code>switch</code> não tem equivalente em Python, mas é essencialmente equivalente a uma forma particular de uma declaração<code>if</code>… <code>elif</code>…<code>elif</code>… <code>else</code> onde cada um dos testes é para valores diferentes da mesma variável. O VisuAlg tem um comando parecido, o <code>escolha</code>.</p>
+<p>Um comando <code>switch</code> é útil quando você tem vários blocos de código possíveis, um dos quais deve ser executado com base no valor de uma expressão específica. Aqui está uma instância clássica da declaração <code>switch</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">letter_grade</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">case</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="n">gpa</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="n">credits</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">case</span><span class="w"> </span><span class="sc">&#39;B&#39;</span><span class="p">:</span>
+<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="n">gpa</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span><span class="n">credits</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="k">case</span><span class="w"> </span><span class="sc">&#39;C&#39;</span><span class="p">:</span>
+<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">    </span><span class="n">gpa</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">    </span><span class="n">credits</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="k">case</span><span class="w"> </span><span class="sc">&#39;D&#39;</span><span class="p">:</span>
+<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="w">    </span><span class="n">gpa</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="w">    </span><span class="n">credits</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="k">case</span><span class="w"> </span><span class="sc">&#39;W&#39;</span><span class="p">:</span>
+<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="k">default</span><span class="o">:</span>
+<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="w">    </span><span class="n">credits</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a><span class="p">}</span>
+</code></pre></div>
+<p>Dentro dos parênteses após a palavra chave <code>switch</code>, temos uma expressão cujo valor deve ser um caractere ou inteiro. O computador avalia essa expressão e desce para uma das palavras-chave <code>case</code> com base em seu valor. Se o valor é o caractere <em>A</em>, então o primeiro bloco é executado (<code>gpa + = 4; créditos += 1;</code>); se for <em>B</em>, então o segundo bloco é executado; se não for nenhum dos caracteres (como um <em>F</em>), o bloco que segue a palavra-chave <code>default</code> é executado.</p>
+<p>O comando <code>break</code> no final de cada bloco é um detalhe crucial: Se o comando <code>break</code> for omitida, o computador continua no bloco seguinte. Em nosso exemplo acima, se omitimos todas as declarações <code>break</code>, então uma nota de <em>A</em> levaria o computador a executar não apenas o caso <em>A</em>, mas também os casos <em>B</em>, <em>C</em>, <em>D</em>, <em>W</em> e <code>default</code>. O resultado seria que o <code>gpa</code> aumentaria em 4 + 3 + 2 + 1 = 10, enquanto que <code>credits</code> aumentaria em 5. Ocasionalmente você realmente deseja que o computador continue no próximo caso (chamado de "fall-through") , e assim você omite uma declaração <code>break</code>; mas na prática você quase sempre quer a declaração <code>break</code> no final de cada caso.</p>
+<p>Há uma exceção importante em que fall-through é bastante comum: às vezes, você deseja que o mesmo código seja aplicado a dois valores diferentes. Por exemplo, se quiséssemos que nada acontecesse se o grau fosse <em>P</em> ou <em>W</em>, então poderíamos incluir <code>case 'P':</code> logo antes de <code>case 'W'</code>, sem nenhum código intermediário.</p>
+<p>O <code>escolha</code> do VisuAlg equivalente ficaria assim:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>escolha (letter_grade)
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>    caso &quot;A&quot;
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>        gpa &lt;- gpa + 4
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>        credits &lt;- credits + 1
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    caso &quot;B&quot;
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>        gpa &lt;- gpa + 3
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>        credits &lt;- credits + 1
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    caso &quot;C&quot;
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>        gpa &lt;- gpa + 2
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>        credits &lt;- credits + 1
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>    caso &quot;D&quot;
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>        gpa &lt;- gpa + 1
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>        credits &lt;- credits + 1
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>    caso &quot;W&quot;
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>    outrocaso
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>        credits &lt;- credits + 1
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>fimescolha
+</code></pre></div>
+<p>Repare na diferença mais importante: <strong>o <code>escolha</code> do VisuAlg não tem fall-through</strong> — cada <code>caso</code> já se comporta como se tivesse um <code>break</code> embutido, então não existe <code>interrompa</code> dentro de um <code>caso</code>, e também não tem como "cair" propositalmente de um caso para o próximo (fora o truque de deixar um <code>caso</code> vazio, como fizemos acima com <code>"W"</code>). Se você programou em VisuAlg antes, o fall-through de C é provavelmente o maior "gotcha" que você vai encontrar em <code>switch</code>.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 2.3</p>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>para i de 1 ate 10 faca
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>    se (i mod 2 = 0) entao
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>        escreval(i)
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    fimse
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>fimpara
+</code></pre></div>
+<p>Escreva o <code>for</code> em C que produz a mesma saída (os números pares de 1 a 10, um por linha). Você pode usar <code>if</code> dentro do <code>for</code>, exatamente como no VisuAlg — a diferença está só na sintaxe do cabeçalho do laço e no delimitador de bloco.</p>
+</div>
+<h3 id="25-arrays">2.5. Arrays<a class="headerlink" href="#25-arrays" title="Permanent link">&para;</a></h3>
+<p>O Python suporta muitos tipos que combinam os tipos atômicos básicos em um grupo:tuples, lists, strings, dictionaries, sets.</p>
+<p>O suporte de C é muito mais rudimentar: o tipo composto <em>só</em> é o array, que é semelhante à lista do Python, exceto que um array em C não pode crescer ou encolher - seu tamanho é fixo no momento da criação. Nesse ponto o VisuAlg é parecido com C: um <code>vetor</code> também tem tamanho fixo, definido na declaração. Você pode declarar e acessar uma matriz da seguinte maneira.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">double</span><span class="w"> </span><span class="n">pops</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">pops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">897934</span><span class="p">;</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">pops</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">11804445</span><span class="p">;</span>
+</code></pre></div>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>var
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>    pops: vetor[0..49] de real
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>inicio
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>    pops[0] &lt;- 897934
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>    pops[1] &lt;- pops[0] + 11804445
+</code></pre></div>
+<p>Neste exemplo, criamos um array contendo 50 slots para valores double. Os slots são indexados de 0 a 49.</p>
+<p>C não tem suporte para acessar o tamanho de um array depois de criado; isto é, não há nada análogo ao <code>len (pops) do Python ou</code> pops.length<code>do Java. O VisuAlg também não guarda o tamanho do vetor em uma variável para você — mas, diferente de C, ele sabe os limites declarados (</code>0..49`) e os usa para checar os acessos, como veremos a seguir.</p>
+<p>Um ponto importante no que diz respeito aos arrays: O que acontece se você acessar um índice de array fora do array, como acessar <code>pops [50]</code> ou <code>pops [-100]</code>? Com Python ou Java, isso terminará o programa com uma mensagem amigável apontando para a linha com falha e dizendo que o programa foi além dos limites da matriz. <strong>O VisuAlg se comporta como Python/Java aqui</strong>: acessar <code>pops[50]</code> gera um erro de execução avisando que o índice está fora da faixa declarada. C não é tão amigável. Quando você acessa além dos limites de um array, ele o faz cegamente.</p>
+<p>Isso pode levar a um comportamento peculiar. Por exemplo, considere o programa a seguir.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">vals</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w">        </span><span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="p">}</span>
+</code></pre></div>
+<p>Alguns sistemas (incluindo uma distribuição do Linux que eu uso) colocariam <code>i</code> na memória logo após a matriz<code>vals</code>; assim, quando <code>i</code> atinge 5 e o computador executa" <code>vals [i] = 0</code>", ele de fato redefine a memória correspondente a <code>i</code> para 0. Como resultado, o loop<code>for</code> foi zerado, e o programa passa pelo loop novamente e repetidamente. O programa nunca alcança a chamada de função <code>printf</code> e o programa nunca termina.</p>
+<blockquote>
+<p>Vamos testar ? :)</p>
+</blockquote>
+<p>Em programas mais complicados, a falta de checagem de limites de array pode levar a bugs muito difíceis, onde o valor de uma variável muda misteriosamente em centenas de funções, e você como programador deve determinar onde um índice de array foi acessado fora dos limites. Este é o tipo de bug que leva muito tempo para descobrir e reparar. Se você tentasse escrever a mesma falha em VisuAlg (um <code>para i de 0 ate 5</code> sobre um <code>vetor[0..4]</code>), o próprio VisuAlg pararia a execução com um erro assim que <code>i</code> chegasse a 5 — é uma boa forma de visualizar, em segurança, o que o C faz "por baixo dos panos" sem avisar.</p>
+<p>É por isso que você deve considerar as mensagens de erro fornecidas pelo Python (ou Java, ou VisuAlg) como extraordinariamente amigáveis: não apenas informa a causa de um problema, mas também informa exatamente qual linha do programa estava com defeito. Isso economiza muito tempo de depuração.</p>
+<p>De vez em quando, você verá uma falha no programa em C, com uma mensagem como "falha de segmentação" ou erro de barramento. "Não será útil incluir qualquer indicação de qual parte do programa é a culpa: tudo que você consegue é aquelas essas duas palavras. Esses erros geralmente significam que o programa tentou acessar um local de memória inválido. Isso pode indicar uma tentativa de acessar um índice de matriz inválido, mas normalmente o índice precisa estar bem fora dos limites para que isso ocorra. (Em geral, isso indica uma tentativa de fazer referência a um ponteiro não inicializado ou a um ponteiro NULL, que discutiremos mais adiante.)</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 2.4</p>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>var
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    notas: vetor[0..4] de real
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    i: inteiro
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>    soma: real
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>inicio
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>    soma &lt;- 0
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>    para i de 0 ate 4 faca
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>        leia(notas[i])
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>        soma &lt;- soma + notas[i]
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>    fimpara
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>    escreval(&quot;Media: &quot;, soma / 5)
+</code></pre></div>
+<p>Escreva a versão em C. Pense em como ler um valor do teclado em C (dica: é a função <code>scanf</code>, que ainda não vimos em detalhe neste texto — se quiser, pesquise a sintaxe de <code>scanf("%lf", &amp;notas[i])</code> antes de tentar, mas tente primeiro montar o resto do programa ao redor dela).</p>
+</div>
+<h3 id="26-comentarios">2.6. Comentários<a class="headerlink" href="#26-comentarios" title="Permanent link">&para;</a></h3>
+<p>No design original de C, todos os comentários começam com uma barra seguida por um asterisco ("/*") e terminam com um asterisco seguido por uma barra ("*/"). O comentário pode abranger várias linhas.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="cm">/* gcd - returns the greatest common</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="cm"> * divisor of its two parameters */</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="kt">int</span><span class="w"> </span><span class="nf">gcd</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</code></pre></div>
+<p>(O asterisco na segunda linha é ignorado pelo compilador. A maioria dos programadores o incluiria, porém, porque parece mais bonito e também porque indica a um leitor humano que o comentário está sendo continuado a partir da linha anterior.)</p>
+<p>Embora este comentário em várias linhas tenha sido o único comentário originalmente incluído no C, o C ++ introduziu um comentário de linha única que provou ser tão útil que a maioria dos compiladores C atuais também o suportam. Começa com dois caracteres de barra ("//") e vai para o final da linha.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">int</span><span class="w"> </span><span class="nf">gcd</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">    </span><span class="c1">// recurse if b != 0</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">gcd</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>O VisuAlg só tem o equivalente ao comentário de linha única de C — também com <code>//</code>, indo até o final da linha. Não existe um equivalente direto ao comentário de bloco <code>/* ... */</code> para comentar várias linhas de uma vez; em VisuAlg, cada linha do comentário precisa do seu próprio <code>//</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>// gcd - devolve o maximo divisor comum
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>// entre os dois parametros
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>funcao gcd(a, b: inteiro): inteiro
+</code></pre></div>
+<h3 id="27-lista-de-exercicios">2.7. Lista de exercícios<a class="headerlink" href="#27-lista-de-exercicios" title="Permanent link">&para;</a></h3>
+<h4 id="estruturas-condicionais">Estruturas condicionais<a class="headerlink" href="#estruturas-condicionais" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Faça um programa que leia um número do usuário e determine se este número é par ou ímpar.</li>
+<li>Faça um programa que receba valores inteiros X, Y e Z do usuário e determine se estes valores podem formar os lados de um triângulo. Em caso afirmativo, informe se o triângulo é equilátero, isósceles ou escaleno.</li>
+<li>Faça um programa que receba um símbolo de operação do usuário (<code>+</code>, <code>-</code>, <code>/</code> ou <code>*</code>) e dois números reais, e retorne o resultado da operação sobre esses dois números (dica: o símbolo pode ser lido como um <code>char</code>, com <code>scanf(" %c", &amp;op);</code> — repare no espaço antes do <code>%c</code>, que evita problemas com quebras de linha deixadas no buffer).</li>
+</ol>
+<h4 id="estruturas-de-repeticao">Estruturas de repetição<a class="headerlink" href="#estruturas-de-repeticao" title="Permanent link">&para;</a></h4>
+<ol>
+<li>O número 3025 tem a seguinte característica: 30 + 25 = 55, e 55×55 = 3025. Faça um programa para encontrar todos os números de 4 algarismos com a mesma característica do número 3025.</li>
+<li>Faça um programa que mostre os 100 primeiros termos da sequência de Fibonacci.</li>
+<li>
+<p>Um método para calcular uma raiz quadrada aproximada:</p>
+<ol>
+<li>Comece testando um <code>g</code> qualquer.</li>
+<li>Se <code>g*g</code> está suficientemente perto de <code>x</code>, então <code>g</code> é uma boa aproximação da raiz quadrada de <code>x</code> — fim.</li>
+<li>Senão, crie um novo <code>g</code>, que é a média entre <code>g</code> e <code>x/g</code> (ou seja, <code>g = (g + x/g) / 2</code>).</li>
+<li>Com o novo <code>g</code>, volte ao passo 2.</li>
+</ol>
+<p>Implemente esse método em C, usando um <code>while</code>.
+7. Uma outra forma de calcular a raiz quadrada de um número: subtraia dele os ímpares consecutivos a partir de 1, até que o resultado fique menor ou igual a zero. O número de subtrações feitas é a raiz quadrada exata (se o resultado final for exatamente 0) ou aproximada do número. Exemplo, para 16: 16 − 1 = 15, 15 − 3 = 12, 12 − 5 = 7, 7 − 7 = 0 → 4 subtrações, e de fato √16 = 4.
+8. Faça um programa que receba dois números do usuário e calcule o MDC (máximo divisor comum) entre eles usando o método de Euclides. O programa deve continuar pedindo pares de números até que o usuário digite 0 e 0.
+9. Faça um programa que encontre todos os pares de números amigáveis entre 1 e 10000. Um par de números é amigável quando cada um deles é igual à soma dos divisores do outro (excluindo ele mesmo). Exemplo: 220 e 284 são amigáveis.
+10. <em>(desafio, com uma função nova)</em> Faça um programa que sorteie um número entre 0 e 500, e pergunte ao usuário, repetidamente, qual é o "número mágico". A cada tentativa, o programa deve dizer se o número secreto é maior ou menor que a tentativa, e contar quantas tentativas foram feitas. Ao acertar, classifique o usuário: 1 a 3 tentativas — muito sortudo; 4 a 6 — sortudo; 7 a 10 — normal; mais que 10 — tente novamente.</p>
+<p>Para sortear um número, você vai precisar de uma função que ainda não vimos no texto: <code>rand()</code>, da biblioteca <code>&lt;stdlib.h&gt;</code>. <code>rand() % 501</code> gera um número pseudoaleatório entre 0 e 500. Se quiser que a sequência sorteada mude a cada execução, pesquise também sobre <code>srand(time(NULL))</code> (da biblioteca <code>&lt;time.h&gt;</code>), chamada uma única vez no início do <code>main</code>.</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

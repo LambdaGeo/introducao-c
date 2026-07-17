@@ -1,0 +1,1263 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Adaptado de 'C for Python Programmers' (Carl Burch / Elizabeth Patitsas), ampliado com comparações e exercícios de mapeamento Python/VisuAlg → C.">
+      
+      
+        <meta name="author" content="Sergio Costa">
+      
+      
+      
+        <link rel="prev" href="../cap03/">
+      
+      
+        <link rel="next" href="../cap05/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>4. Vetores e Strings - C para Programadores Python e VisuAlg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-vetores-e-strings" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-header__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C para Programadores Python e VisuAlg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              4. Vetores e Strings
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-nav__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    C para Programadores Python e VisuAlg
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Construindo um simples programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Expressões e comandos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Bibliotecas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Vetores e Strings
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Vetores e Strings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#4-vetores-e-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Vetores e Strings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Vetores e Strings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-vetores-inicializando-e-percorrendo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Vetores: inicializando e percorrendo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-passando-vetores-para-funcoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Passando vetores para funções
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-strings-em-c-vetores-de-char" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Strings em C: vetores de char
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-funcoes-de-string-stringh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Funções de string (&lt;string.h&gt;)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-vetores-de-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5. Vetores de strings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Structs (registros)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Ponteiros e Alocação Dinâmica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Compilação Separada e Bibliotecas Externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conclusao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusão e Próximos Passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#4-vetores-e-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Vetores e Strings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Vetores e Strings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-vetores-inicializando-e-percorrendo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Vetores: inicializando e percorrendo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-passando-vetores-para-funcoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Passando vetores para funções
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-strings-em-c-vetores-de-char" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Strings em C: vetores de char
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-funcoes-de-string-stringh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Funções de string (&lt;string.h&gt;)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-vetores-de-strings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5. Vetores de strings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>4. Vetores e Strings</h1>
+
+<h2 id="4-vetores-e-strings">4. Vetores e Strings<a class="headerlink" href="#4-vetores-e-strings" title="Permanent link">&para;</a></h2>
+<p>Na <a href="../cap02/#25-arrays">Seção 2.5</a> já demos uma primeira olhada em vetores. Neste capítulo vamos aprofundar em vetores e, principalmente, em como C representa <strong>strings</strong> — que, como você vai ver, não são um tipo à parte em C, e sim um caso particular de vetor.</p>
+<div class="admonition note">
+<p class="admonition-title">Ainda sem ponteiros</p>
+<p>Dá pra explicar bastante coisa sobre vetores e strings em C sem falar de ponteiros — e é isso que vamos fazer aqui, focando nas semelhanças e diferenças com o <code>vetor</code>/<code>cadeia</code> do VisuAlg e a <code>list</code>/<code>str</code> do Python. Só que algumas coisas em C (por que passar um vetor para uma função já altera o original? por que <code>==</code> não compara o conteúdo de duas strings?) só fazem sentido de verdade quando você entende ponteiros. Por enquanto vamos tratar esses comportamentos como <strong>fatos observáveis</strong> — "é assim que funciona" — e explicar o "porquê" no capítulo de ponteiros, quando vamos voltar a estes mesmos tópicos.</p>
+</div>
+<h3 id="41-vetores-inicializando-e-percorrendo">4.1. Vetores: inicializando e percorrendo<a class="headerlink" href="#41-vetores-inicializando-e-percorrendo" title="Permanent link">&para;</a></h3>
+<p>Como já vimos, um vetor em C tem tamanho fixo, definido na hora da declaração — nesse ponto ele é igual ao <code>vetor</code> do VisuAlg, e diferente da <code>list</code> do Python, que cresce e encolhe livremente.</p>
+<p>Uma diferença que ainda não tínhamos visto: em C (e em Python) você pode declarar um vetor já <strong>inicializando</strong> todos os seus valores de uma vez, com uma lista entre chaves. O VisuAlg não tem essa opção — lá, você sempre inicializa posição por posição.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">};</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>var
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    v: vetor[0..4] de inteiro
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>inicio
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    v[0] &lt;- 10
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    v[1] &lt;- 20
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    v[2] &lt;- 30
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    v[3] &lt;- 40
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    v[4] &lt;- 50
+</code></pre></div>
+<p>Se você inicializa um vetor em C com menos valores do que o tamanho declarado, o C completa o resto com zero — é a única forma de "zerar" um vetor inteiro de forma compacta, sem um laço:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">contadores</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w">   </span><span class="c1">// as 100 posições começam em 0</span>
+</code></pre></div>
+<p>Percorrer um vetor com um laço é basicamente igual nas três linguagens — só muda a sintaxe do <code>for</code>/<code>para</code>, que já vimos no capítulo anterior:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">soma</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">soma</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">soma</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># ou, mais &quot;pythonico&quot;: soma = sum(v)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>soma &lt;- 0
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>para i de 0 ate 4 faca
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    soma &lt;- soma + v[i]
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>fimpara
+</code></pre></div>
+<p>Repare no comentário na versão Python: para tarefas comuns como somar todos os elementos, Python tem funções prontas (<code>sum</code>, <code>max</code>, <code>min</code>, <code>sorted</code>, ...) que operam sobre a lista inteira de uma vez. Nem C nem VisuAlg têm esse tipo de função embutida para vetores — você sempre escreve o laço manualmente.</p>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th>C</th>
+<th>VisuAlg</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tamanho fixo, definido na declaração</td>
+<td>sim</td>
+<td>sim</td>
+<td>não (<code>list</code> cresce/encolhe)</td>
+</tr>
+<tr>
+<td>inicializar com valores literais</td>
+<td><code>{10, 20, 30}</code></td>
+<td>não existe — só posição por posição</td>
+<td><code>[10, 20, 30]</code></td>
+</tr>
+<tr>
+<td>adicionar elemento no fim</td>
+<td>não existe</td>
+<td>não existe</td>
+<td><code>v.append(x)</code></td>
+</tr>
+<tr>
+<td>somar/máx/mín "prontos"</td>
+<td>não existe (laço manual)</td>
+<td>não existe (laço manual)</td>
+<td><code>sum(v)</code>, <code>max(v)</code>, <code>min(v)</code></td>
+</tr>
+<tr>
+<td>índice do primeiro elemento</td>
+<td><code>0</code></td>
+<td><code>0</code> (ou o que você declarar, ex. <code>1..N</code>)</td>
+<td><code>0</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 4.1</p>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>var
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    notas: vetor[0..4] de real
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    i: inteiro
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    maior: real
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>inicio
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    maior &lt;- notas[0]
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    para i de 1 ate 4 faca
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        se (notas[i] &gt; maior) entao
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>            maior &lt;- notas[i]
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        fimse
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    fimpara
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    escreval(&quot;Maior nota: &quot;, maior)
+</code></pre></div>
+<p>Escreva o equivalente em C, considerando que o vetor <code>notas</code> já vem preenchido com 5 valores (por exemplo, inicializado como <code>{7.5, 9.0, 6.0, 8.5, 10.0}</code>).</p>
+</div>
+<h3 id="42-passando-vetores-para-funcoes">4.2. Passando vetores para funções<a class="headerlink" href="#42-passando-vetores-para-funcoes" title="Permanent link">&para;</a></h3>
+<p>Aqui vai um comportamento importante para observar, mesmo sem entender ainda o mecanismo por trás: em C, quando você passa um vetor como parâmetro para uma função e a função modifica os elementos do vetor, <strong>essa modificação é vista de volta na função que chamou</strong> — diferente do que acontece com um <code>int</code> ou um <code>double</code> passados normalmente.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">dobra</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">tamanho</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tamanho</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">        </span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">numeros</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="n">dobra</span><span class="p">(</span><span class="n">numeros</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d %d %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">numeros</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">numeros</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">numeros</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span><span class="w">  </span><span class="c1">// 2 4 6</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="p">}</span>
+</code></pre></div>
+<p>Se isso te lembrou o comportamento de listas em Python, você não está enganado:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">dobra</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">numeros</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">dobra</span><span class="p">(</span><span class="n">numeros</span><span class="p">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">numeros</span><span class="p">)</span>  <span class="c1"># [2, 4, 6]</span>
+</code></pre></div>
+<p>Em Python, uma função que recebe uma <code>list</code> e modifica seus elementos <strong>também</strong> altera a lista original — porque listas são um tipo mutável, e o que é passado para a função é uma referência à mesma lista, não uma cópia. Em C, algo parecido acontece com vetores (o motivo exato — que envolve ponteiros — fica para mais adiante).</p>
+<p>Já em VisuAlg, o comportamento <strong>depende de como você declara o parâmetro</strong>: por padrão, um parâmetro é passado por valor (a função recebe uma cópia, e mudanças não voltam para quem chamou); para que a função possa alterar o vetor original, é preciso declarar o parâmetro com a palavra <code>var</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>procedimento dobra(var v: vetor[0..2] de inteiro)
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>var
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    i: inteiro
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>inicio
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    para i de 0 ate 2 faca
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        v[i] &lt;- v[i] * 2
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    fimpara
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>fimprocedimento
+</code></pre></div>
+<p>Ou seja: em C esse comportamento de "referência" vem de graça para vetores, sem precisar escrever nada de especial; em VisuAlg você precisa pedir isso explicitamente com <code>var</code>. Guarde essa observação — ela vai fazer todo o sentido quando falarmos de ponteiros.</p>
+<h3 id="43-strings-em-c-vetores-de-char">4.3. Strings em C: vetores de <code>char</code><a class="headerlink" href="#43-strings-em-c-vetores-de-char" title="Permanent link">&para;</a></h3>
+<p>Aqui está a maior diferença entre C e as duas linguagens que você já conhece: <strong>C não tem um tipo string</strong>. O que existe é uma convenção: uma string é um vetor de <code>char</code> que termina com um caractere especial, <code>'\0'</code> (chamado de caractere nulo), marcando onde o texto acaba.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">nome</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Sergio&quot;</span><span class="p">;</span>
+</code></pre></div>
+<p>Essa linha cria um vetor de 20 posições e preenche as 7 primeiras com <code>'S'</code>, <code>'e'</code>, <code>'r'</code>, <code>'g'</code>, <code>'i'</code>, <code>'o'</code>, <code>'\0'</code> — o <code>\0</code> é adicionado automaticamente pelo compilador porque usamos uma string literal (<code>"Sergio"</code>) para inicializar. As outras 13 posições ficam com lixo de memória, sem valor definido, mas não importa: qualquer função que trabalha com essa string vai parar de ler assim que encontrar o <code>'\0'</code>, então o "lixo" depois dele nunca é usado.</p>
+<p>Repare que o tamanho do vetor (aqui, 20) <strong>precisa ser maior</strong> do que o texto que você pretende guardar — sobrando pelo menos 1 posição para o <code>\0</code>. Isso não tem paralelo direto em Python ou VisuAlg, onde uma string simplesmente cresce e encolhe conforme o conteúdo, sem você se preocupar em reservar espaço.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C (<code>char[]</code>)</th>
+<th>VisuAlg (<code>cadeia</code>)</th>
+<th>Python (<code>str</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>é um tipo de verdade, ou é "só um vetor"?</td>
+<td>é um vetor de <code>char</code> (convenção)</td>
+<td>tipo próprio</td>
+<td>tipo próprio</td>
+</tr>
+<tr>
+<td>precisa reservar tamanho manualmente</td>
+<td>sim</td>
+<td>não</td>
+<td>não</td>
+</tr>
+<tr>
+<td>marcador de fim de string visível</td>
+<td><code>'\0'</code></td>
+<td>não existe (a linguagem cuida disso)</td>
+<td>não existe (a linguagem cuida disso)</td>
+</tr>
+<tr>
+<td>pode ser modificada depois de criada</td>
+<td>sim (é um vetor comum)</td>
+<td>sim</td>
+<td><strong>não</strong> — <code>str</code> é imutável em Python</td>
+</tr>
+</tbody>
+</table>
+<p>Ler uma string do teclado usa <code>scanf</code> com o especificador <code>%s</code> — e, diferente de outras variáveis, você <strong>não</strong> usa <code>&amp;</code> antes do nome do vetor (mais um comportamento para anotar e entender de verdade só no capítulo de ponteiros):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">nome</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nome</span><span class="p">);</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Ola, %s!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nome</span><span class="p">);</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">nome</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Nome: &quot;</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ola,&quot;</span><span class="p">,</span> <span class="n">nome</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>var
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    nome: cadeia
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>inicio
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    leia(nome)
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    escreval(&quot;Ola, &quot;, nome, &quot;!&quot;)
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>fimalgoritmo
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">scanf(\"%s\", ...) é perigoso</p>
+<p>O <code>scanf("%s", nome)</code> não sabe que <code>nome</code> só tem 20 posições — se o usuário digitar um texto maior que isso, o <code>scanf</code> vai escrever além do fim do vetor, exatamente o tipo de comportamento sem checagem de limites que vimos na <a href="../cap02/#25-arrays">Seção 2.5</a>. Existem formas mais seguras de ler uma linha em C (como <code>fgets</code>), mas isso fica para mais adiante.</p>
+</div>
+<h3 id="44-funcoes-de-string-stringh">4.4. Funções de string (<code>&lt;string.h&gt;</code>)<a class="headerlink" href="#44-funcoes-de-string-stringh" title="Permanent link">&para;</a></h3>
+<p>Como uma string em C é só um vetor de <code>char</code>, os operadores comuns não fazem o que você esperaria vindo de Python ou VisuAlg. Em particular:</p>
+<div class="admonition warning">
+<p class="admonition-title">O maior gotcha para quem vem de Python/VisuAlg</p>
+<p>Em C, <strong>você não pode usar <code>==</code> para comparar o conteúdo de duas strings</strong>, e <strong>não pode usar <code>=</code> para copiar uma string em outra</strong>. Isso compila, mas não faz o que parece fazer — <code>==</code> compara <em>onde</em> os vetores estão na memória, não o que tem dentro deles. Para comparar ou copiar o conteúdo de verdade, C oferece funções prontas na biblioteca <code>&lt;string.h&gt;</code>.</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="kt">char</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;casa&quot;</span><span class="p">;</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="kt">char</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;casa&quot;</span><span class="p">;</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">          </span><span class="c1">// ERRADO: quase sempre dá falso, mesmo com o mesmo texto!</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;iguais</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="p">}</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// CERTO: strcmp devolve 0 quando as strings são iguais</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;iguais</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="p">}</span>
+</code></pre></div>
+<p>Em Python, <code>a == b</code> já compara o conteúdo das duas strings — é exatamente o que parece que deveria fazer. Em VisuAlg, <code>a = b</code> faz a mesma coisa. É só em C que você precisa de uma função à parte para isso.</p>
+<table>
+<thead>
+<tr>
+<th>O que você quer fazer</th>
+<th>C</th>
+<th>VisuAlg</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tamanho da string</td>
+<td><code>strlen(s)</code></td>
+<td><code>compr(s)</code></td>
+<td><code>len(s)</code></td>
+</tr>
+<tr>
+<td>copiar o conteúdo</td>
+<td><code>strcpy(destino, origem)</code></td>
+<td><code>destino &lt;- origem</code></td>
+<td><code>destino = origem</code></td>
+</tr>
+<tr>
+<td>concatenar (juntar)</td>
+<td><code>strcat(destino, origem)</code></td>
+<td><code>destino &lt;- destino + origem</code></td>
+<td><code>destino += origem</code></td>
+</tr>
+<tr>
+<td>comparar conteúdo</td>
+<td><code>strcmp(a, b) == 0</code></td>
+<td><code>a = b</code></td>
+<td><code>a == b</code></td>
+</tr>
+<tr>
+<td>pedaço da string (substring)</td>
+<td><em>(precisa laço manual, ou funções de <code>&lt;string.h&gt;</code> mais avançadas)</em></td>
+<td><code>copia(s, inicio, tamanho)</code></td>
+<td><code>s[inicio:fim]</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">nome</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Sergio&quot;</span><span class="p">;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="kt">char</span><span class="w"> </span><span class="n">sobrenome</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot; Costa&quot;</span><span class="p">;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">strcat</span><span class="p">(</span><span class="n">nome</span><span class="p">,</span><span class="w"> </span><span class="n">sobrenome</span><span class="p">);</span><span class="w">          </span><span class="c1">// nome agora contém &quot;Sergio Costa&quot;</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s tem %lu letras</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nome</span><span class="p">,</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">nome</span><span class="p">));</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">nome</span> <span class="o">=</span> <span class="s2">&quot;Sergio&quot;</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">sobrenome</span> <span class="o">=</span> <span class="s2">&quot; Costa&quot;</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">nome</span> <span class="o">+=</span> <span class="n">sobrenome</span>                  <span class="c1"># nome agora contém &quot;Sergio Costa&quot;</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="s2">&quot;tem&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nome</span><span class="p">),</span> <span class="s2">&quot;letras&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>var
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>    nome: cadeia
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>    sobrenome: cadeia
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>inicio
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>    nome &lt;- &quot;Sergio&quot;
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>    sobrenome &lt;- &quot; Costa&quot;
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>    nome &lt;- nome + sobrenome
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>    escreval(nome, &quot; tem &quot;, compr(nome), &quot; letras&quot;)
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>fimalgoritmo
+</code></pre></div>
+<p>Note que <code>strcat(nome, sobrenome)</code> exige que o vetor <code>nome</code> já tenha espaço sobrando para caber o resultado da concatenação — se <code>nome</code> tivesse sido declarado com tamanho exato para "Sergio" (7 posições, contando o <code>\0</code>), o <code>strcat</code> escreveria além do fim do vetor. Mais um lugar onde C confia inteiramente em você para reservar espaço suficiente.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 4.2</p>
+<p>Em Python:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">usuario</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Digite seu usuario: &quot;</span><span class="p">)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">senha</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Digite sua senha: &quot;</span><span class="p">)</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="k">if</span> <span class="n">usuario</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span> <span class="ow">and</span> <span class="n">senha</span> <span class="o">==</span> <span class="s2">&quot;1234&quot;</span><span class="p">:</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Acesso permitido&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Acesso negado&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Escreva o equivalente em C. Lembre-se: (1) strings em C precisam de um vetor de <code>char</code> com tamanho reservado, e (2) comparar strings exige <code>strcmp</code>, não <code>==</code>. Se quiser, primeiro escreva a versão em VisuAlg como passo intermediário.</p>
+<details class="tip">
+<summary>Dica, não gabarito</summary>
+<p><code>strcmp(usuario, "admin") == 0</code> é a forma de checar se <code>usuario</code> é igual a <code>"admin"</code>. Para combinar as duas condições, você vai precisar do operador lógico "e" de C — reveja a <a href="../cap02/#21-operadores">Seção 2.1</a> se não lembrar qual é.</p>
+</details>
+</div>
+<h3 id="45-vetores-de-strings">4.5. Vetores de strings<a class="headerlink" href="#45-vetores-de-strings" title="Permanent link">&para;</a></h3>
+<p>Assim como você pode ter um vetor de <code>int</code> ou de <code>double</code>, também é possível ter um vetor onde cada posição é uma string — útil, por exemplo, para guardar uma lista de nomes. Em C isso é declarado como uma matriz de <code>char</code> (um vetor de vetores de <code>char</code>): a primeira dimensão é "quantas strings", a segunda é "tamanho máximo de cada string".</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kt">char</span><span class="w"> </span><span class="n">nomes</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;Ana&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Bruno&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Carla&quot;</span><span class="p">};</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nomes</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">nomes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Ana&quot;</span><span class="p">,</span> <span class="s2">&quot;Bruno&quot;</span><span class="p">,</span> <span class="s2">&quot;Carla&quot;</span><span class="p">]</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="k">for</span> <span class="n">nome</span> <span class="ow">in</span> <span class="n">nomes</span><span class="p">:</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">nome</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>var
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>    nomes: vetor[0..2] de cadeia
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>    i: inteiro
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>inicio
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>    nomes[0] &lt;- &quot;Ana&quot;
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>    nomes[1] &lt;- &quot;Bruno&quot;
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>    nomes[2] &lt;- &quot;Carla&quot;
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    para i de 0 ate 2 faca
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>        escreval(nomes[i])
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>    fimpara
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>fimalgoritmo
+</code></pre></div>
+<p>Repare como, de novo, o Python é o único dos três que consegue inicializar a lista inteira com uma linha só (<code>["Ana", "Bruno", "Carla"]</code>) e nem precisa se preocupar com quantas letras cada nome tem — o VisuAlg pelo menos deixa você inicializar cada posição em uma linha; o C exige que você reserve, por adiantado, um tamanho máximo (<code>20</code>, no exemplo) para o maior nome que algum dia vai caber ali.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 4.3</p>
+<p>Em VisuAlg:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>var
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    cores: vetor[0..3] de cadeia
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>    i: inteiro
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>inicio
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    cores[0] &lt;- &quot;vermelho&quot;
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>    cores[1] &lt;- &quot;verde&quot;
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>    cores[2] &lt;- &quot;azul&quot;
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>    cores[3] &lt;- &quot;amarelo&quot;
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>    para i de 0 ate 3 faca
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>        se (compr(cores[i]) &gt; 5) entao
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>            escreval(cores[i])
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>        fimse
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>    fimpara
+</code></pre></div>
+<p>Esse trecho imprime as cores cujo nome tem mais de 5 letras. Escreva a versão em C (dica: qual das funções da tabela da Seção 4.4 substitui <code>compr</code>?).</p>
+</div>
+<h3 id="46-lista-de-exercicios">4.6. Lista de exercícios<a class="headerlink" href="#46-lista-de-exercicios" title="Permanent link">&para;</a></h3>
+<h4 id="vetores">Vetores<a class="headerlink" href="#vetores" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Faça um programa que leia N valores (N informado pelo usuário, até um máximo de 100), guarde-os em um vetor, e imprima: (a) o maior valor; (b) a média dos valores; (c) os valores em ordem crescente; (d) o subconjunto de valores primos contidos no vetor.</li>
+<li>Faça um programa que preencha um vetor de inteiros com 10 posições e imprima: o maior elemento, o menor elemento, a soma de todos os elementos, e a média aritmética entre eles.</li>
+<li>Faça um programa que, dadas duas matrizes A e B de dimensão 5×5 (<code>int a[5][5];</code> declara uma matriz 5×5 de inteiros; acessa-se com <code>a[i][j]</code>), calcule e imprima: (a) a soma das duas matrizes; (b) a soma dos elementos da diagonal principal de cada matriz; (c) o produto das duas matrizes.</li>
+<li>Em um tabuleiro de xadrez 8×8, cada posição guarda um código: <code>0</code> = ausência de peça, <code>1</code> = peão, <code>2</code> = cavalo, <code>3</code> = torre, <code>4</code> = bispo, <code>5</code> = rei, <code>6</code> = rainha. Leia um tabuleiro 8×8 (64 valores) para uma matriz <code>int tabuleiro[8][8]</code> e calcule: (a) a soma entre a quantidade de peões e de bispos; (b) a quantidade de posições sem peça alguma.</li>
+<li>
+<p>A tabela abaixo dá a distância, em km, entre 5 cidades:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Cidade 1</th>
+<th>Cidade 2</th>
+<th>Cidade 3</th>
+<th>Cidade 4</th>
+<th>Cidade 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cidade 1</strong></td>
+<td>0</td>
+<td>12</td>
+<td>10</td>
+<td>5</td>
+<td>15</td>
+</tr>
+<tr>
+<td><strong>Cidade 2</strong></td>
+<td>12</td>
+<td>0</td>
+<td>10</td>
+<td>28</td>
+<td>20</td>
+</tr>
+<tr>
+<td><strong>Cidade 3</strong></td>
+<td>10</td>
+<td>10</td>
+<td>0</td>
+<td>18</td>
+<td>25</td>
+</tr>
+<tr>
+<td><strong>Cidade 4</strong></td>
+<td>5</td>
+<td>28</td>
+<td>18</td>
+<td>0</td>
+<td>22</td>
+</tr>
+<tr>
+<td><strong>Cidade 5</strong></td>
+<td>15</td>
+<td>20</td>
+<td>25</td>
+<td>22</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Guarde essa tabela em uma matriz <code>int dist[5][5]</code> já inicializada no código (uma matriz literal, como vimos na Seção 4.1) e escreva um programa que: (a) leia pares de códigos de cidade (1 a 5) e informe a distância entre elas, repetindo até que o usuário digite 0 e 0; (b) dado um percurso informado como uma sequência de códigos de cidade (por exemplo, <code>1 2 3 2 5 1 4</code>), imprima a distância total percorrida, somando a distância entre cada cidade e a próxima da sequência.
+6. Um cinema com capacidade para 20 lugares está sempre lotado. Em uma sessão, cada um dos 20 espectadores respondeu um questionário com sua idade e sua opinião sobre o filme (uma string: <code>"otimo"</code>, <code>"bom"</code>, <code>"regular"</code>, <code>"ruim"</code> ou <code>"pessimo"</code>). Leia esses 20 pares (idade, opinião) e calcule: (a) a quantidade de respostas <code>"otimo"</code>; (b) a diferença percentual entre respostas <code>"bom"</code> e <code>"regular"</code>; (c) a média de idade das pessoas que responderam <code>"ruim"</code>; (d) a maior idade entre quem respondeu <code>"pessimo"</code>. Use <code>strcmp</code> para comparar as opiniões — lembre-se de que <code>==</code> não funciona para strings, como vimos na Seção 4.4.
+7. Considere o programa abaixo, que lê as notas de uma turma e calcula estatísticas:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Quantidade de alunos: &quot;</span><span class="p">);</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">qtAlunos</span><span class="p">);</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">notas</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Nota (%d): &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="w">        </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="w">        </span><span class="n">soma</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">soma</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">media</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">soma</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span>
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">maior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notas</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">maior</span><span class="p">)</span><span class="w"> </span><span class="n">maior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a>
+<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">menor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notas</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">menor</span><span class="p">)</span><span class="w"> </span><span class="n">menor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a>
+<a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a><span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">limiar</span><span class="p">;</span>
+<a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Nota limiar: &quot;</span><span class="p">);</span>
+<a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a><span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">limiar</span><span class="p">);</span>
+<a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">conta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">qtAlunos</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">notas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">limiar</span><span class="p">)</span><span class="w"> </span><span class="n">conta</span><span class="o">++</span><span class="p">;</span>
+<a id="__codelineno-24-36" name="__codelineno-24-36" href="#__codelineno-24-36"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-24-37" name="__codelineno-24-37" href="#__codelineno-24-37"></a>
+<a id="__codelineno-24-38" name="__codelineno-24-38" href="#__codelineno-24-38"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Media: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">media</span><span class="p">);</span>
+<a id="__codelineno-24-39" name="__codelineno-24-39" href="#__codelineno-24-39"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Maior nota: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">maior</span><span class="p">);</span>
+<a id="__codelineno-24-40" name="__codelineno-24-40" href="#__codelineno-24-40"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Menor nota: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">menor</span><span class="p">);</span>
+<a id="__codelineno-24-41" name="__codelineno-24-41" href="#__codelineno-24-41"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Foram %d maiores que %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">conta</span><span class="p">,</span><span class="w"> </span><span class="n">limiar</span><span class="p">);</span>
+<a id="__codelineno-24-42" name="__codelineno-24-42" href="#__codelineno-24-42"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-24-43" name="__codelineno-24-43" href="#__codelineno-24-43"></a><span class="p">}</span>
+</code></pre></div>
+<p>Reescreva esse programa criando as seguintes funções (lembre-se da Seção 4.2: um vetor passado como parâmetro já permite que a função o acesse/altere):</p>
+<ul>
+<li><code>int le_notas(float notas[], int max)</code> — lê as notas do usuário e devolve quantas foram lidas.</li>
+<li><code>float media_notas(float notas[], int n)</code> — devolve a média.</li>
+<li><code>float maior_nota(float notas[], int n)</code> — devolve o maior valor.</li>
+<li><code>float menor_nota(float notas[], int n)</code> — devolve o menor valor.</li>
+<li><code>int conta_acima(float notas[], int n, float limiar)</code> — devolve quantos valores estão acima do limiar.</li>
+</ul>
+</li>
+</ol>
+<h4 id="strings">Strings<a class="headerlink" href="#strings" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Faça um programa que leia uma palavra (sem espaços) e conte quantas vogais ela tem.</li>
+<li>Faça um programa que leia uma palavra (sem espaços) e diga se ela é um palíndromo — isto é, se lida de trás para frente é igual à original (ex.: <code>"arara"</code>, <code>"osso"</code>).</li>
+<li>Faça um programa que leia uma palavra e a imprima invertida (ex.: entrada <code>"programa"</code>, saída <code>"amargorp"</code>).</li>
+<li>Faça um programa que leia um vetor de 5 palavras (<code>char nomes[5][20]</code>, como na Seção 4.5) e as imprima em ordem alfabética. (Dica: <code>strcmp(a, b)</code> devolve um valor negativo se <code>a</code> vem antes de <code>b</code> em ordem alfabética, positivo se vem depois, e 0 se são iguais — dá para usar isso no lugar de <code>&lt;</code>/<code>&gt;</code> dentro de um algoritmo de ordenação como o que você já deve conhecer de Python/VisuAlg.)</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1267 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Adaptado de 'C for Python Programmers' (Carl Burch / Elizabeth Patitsas), ampliado com comparações e exercícios de mapeamento Python/VisuAlg → C.">
+      
+      
+        <meta name="author" content="Sergio Costa">
+      
+      
+      
+        <link rel="prev" href="../cap05/">
+      
+      
+        <link rel="next" href="../cap07/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>6. Ponteiros e Alocação Dinâmica - C para Programadores Python e VisuAlg</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#6-ponteiros-e-alocacao-dinamica" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-header__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            C para Programadores Python e VisuAlg
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              6. Ponteiros e Alocação Dinâmica
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="C para Programadores Python e VisuAlg" class="md-nav__button md-logo" aria-label="C para Programadores Python e VisuAlg" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    C para Programadores Python e VisuAlg
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Construindo um simples programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Expressões e comandos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Bibliotecas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Vetores e Strings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Structs (registros)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Ponteiros e Alocação Dinâmica
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Ponteiros e Alocação Dinâmica
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#6-ponteiros-e-alocacao-dinamica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ponteiros e Alocação Dinâmica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Ponteiros e Alocação Dinâmica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-enderecos-de-memoria-e-o-operador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Endereços de memória e o operador &amp;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-ponteiros-guardando-um-endereco-em-uma-variavel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Ponteiros: guardando um endereço em uma variável
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-ponteiros-explicam-o-comportamento-dos-vetores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3. Ponteiros explicam o comportamento dos vetores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-ponteiros-explicam-o-comportamento-dos-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4. Ponteiros explicam o comportamento dos structs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-por-que-precisamos-de-alocacao-dinamica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5. Por que precisamos de alocação dinâmica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-onde-a-memoria-reside-pilha-stack-vs-monte-heap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6. Onde a memória reside: Pilha (Stack) vs. Monte (Heap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-malloc-sizeof-e-free" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7. malloc, sizeof e free
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-ponteiro-nulo-e-verificacao-de-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.8. Ponteiro nulo e verificação de erros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-calloc-e-realloc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.9. calloc e realloc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#610-um-primeiro-contato-com-listas-encadeadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.10. Um primeiro contato com listas encadeadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#611-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.11. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cap07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Compilação Separada e Bibliotecas Externas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conclusao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conclusão e Próximos Passos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#6-ponteiros-e-alocacao-dinamica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Ponteiros e Alocação Dinâmica
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Ponteiros e Alocação Dinâmica">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-enderecos-de-memoria-e-o-operador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Endereços de memória e o operador &amp;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-ponteiros-guardando-um-endereco-em-uma-variavel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Ponteiros: guardando um endereço em uma variável
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-ponteiros-explicam-o-comportamento-dos-vetores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3. Ponteiros explicam o comportamento dos vetores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-ponteiros-explicam-o-comportamento-dos-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4. Ponteiros explicam o comportamento dos structs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-por-que-precisamos-de-alocacao-dinamica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5. Por que precisamos de alocação dinâmica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-onde-a-memoria-reside-pilha-stack-vs-monte-heap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6. Onde a memória reside: Pilha (Stack) vs. Monte (Heap)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-malloc-sizeof-e-free" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7. malloc, sizeof e free
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-ponteiro-nulo-e-verificacao-de-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.8. Ponteiro nulo e verificação de erros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-calloc-e-realloc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.9. calloc e realloc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#610-um-primeiro-contato-com-listas-encadeadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.10. Um primeiro contato com listas encadeadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#611-lista-de-exercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.11. Lista de exercícios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>6. Ponteiros e Alocação Dinâmica</h1>
+
+<h2 id="6-ponteiros-e-alocacao-dinamica">6. Ponteiros e Alocação Dinâmica<a class="headerlink" href="#6-ponteiros-e-alocacao-dinamica" title="Permanent link">&para;</a></h2>
+<p>Chegou a hora de fechar as pontas soltas dos dois capítulos anteriores. Vimos que passar um vetor para uma função em C já altera o original "de graça" (Seção 4.2), que passar um struct <strong>não</strong> faz isso (Seção 5.5), e que <code>scanf</code> sempre pede <code>&amp;variavel</code> sem explicar por quê. Tudo isso tem a mesma explicação: <strong>ponteiros</strong>.</p>
+<p>Este é também o primeiro capítulo em que Python e VisuAlg não têm muito o que comparar diretamente — e por um bom motivo, que vale a pena entender antes de começar.</p>
+<div class="admonition note">
+<p class="admonition-title">Ponteiros implícitos em linguagens de alto nível (Python, Java, etc.)</p>
+<p>Em linguagens como Python e Java, <strong>toda variável que guarda um objeto, lista ou estrutura complexa é, por baixo dos panos, um ponteiro</strong> (chamado de <em>referência</em>). A grande diferença para o C é que essas linguagens escondem a representação numérica e a sintaxe desse ponteiro de você: você não usa os operadores <code>*</code> ou <code>&amp;</code> e <strong>não pode fazer aritmética de ponteiros</strong> (como somar números a um ponteiro para avançar posições na memória física).</p>
+<p>Para visualizar que variáveis em Python são de fato ponteiros apontando para a mesma área de memória, observe este exemplo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">l1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">l2</span> <span class="o">=</span> <span class="n">l1</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">l2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span>  <span class="c1"># Imprime [99, 20]!</span>
+</code></pre></div>
+<p>Por que alterar <code>l2</code> modificou <code>l1</code>? Porque ao fazer <code>l2 = l1</code>, você copiou o <em>endereço</em> que estava guardado em <code>l1</code> para <code>l2</code>. Ambas as variáveis passaram a apontar para a mesma região da memória onde os dados físicos da lista <code>[10, 20]</code> estão armazenados.</p>
+<p>Esse conceito explica também erros clássicos em outras linguagens. O famoso <code>NullPointerException</code> em Java, ou o erro <code>AttributeError: 'NoneType' object has no attribute...</code> em Python ocorrem exatamente quando tentamos interagir com uma variável que <strong>não aponta para nenhum endereço de memória válido</strong> (uma referência nula, ou <code>None</code>). Em C, esse é o equivalente exato de tentar desreferenciar um ponteiro que aponta para <code>NULL</code> (ponteiro nulo).</p>
+<p>O VisuAlg segue o caminho oposto: ele não expõe endereços e faz cópias de registros por padrão. O C está no meio, dando a você controle direto e explícito sobre esses ponteiros para ler e escrever em qualquer posição da memória.</p>
+</div>
+<h3 id="61-enderecos-de-memoria-e-o-operador">6.1. Endereços de memória e o operador <code>&amp;</code><a class="headerlink" href="#61-enderecos-de-memoria-e-o-operador" title="Permanent link">&para;</a></h3>
+<p>Toda variável, quando o programa está rodando, ocupa um endereço na memória do computador — um número que identifica <em>onde</em> aquele valor está guardado. Em C, você pode descobrir esse endereço com o operador <code>&amp;</code> ("endereço de"):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span><span class="w">   </span><span class="c1">// imprime algo como 0x7ffee3a1b4ac</span>
+</code></pre></div>
+<p>Isso talvez já pareça familiar: toda vez que você escreveu <code>scanf("%d", &amp;x);</code> nos exemplos deste texto, você já estava usando <code>&amp;</code>, sem uma explicação completa do porquê. Agora ela existe: <code>scanf</code> recebe como parâmetro o <strong>endereço</strong> da variável <code>x</code>, e não o valor de <code>x</code>, porque <code>scanf</code> precisa saber <em>onde</em> escrever o valor que acabou de ler do teclado. Se <code>scanf</code> recebesse só o valor de <code>x</code> (que nem existe ainda, antes da leitura), não haveria como ele "devolver" o número lido para dentro da sua variável.</p>
+<h3 id="62-ponteiros-guardando-um-endereco-em-uma-variavel">6.2. Ponteiros: guardando um endereço em uma variável<a class="headerlink" href="#62-ponteiros-guardando-um-endereco-em-uma-variavel" title="Permanent link">&para;</a></h3>
+<p>Um <strong>ponteiro</strong> é uma variável cujo valor é um endereço de memória — geralmente o endereço de uma outra variável. Declara-se um ponteiro com um <code>*</code> antes do nome:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span><span class="w">     </span><span class="c1">// p é um ponteiro para int</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">;</span><span class="w">     </span><span class="c1">// p agora guarda o endereço de x</span>
+</code></pre></div>
+<p>A partir daqui, <code>p</code> "aponta para" <code>x</code>. Para acessar ou modificar o valor de <code>x</code> <strong>através de</strong> <code>p</code>, usa-se o mesmo <code>*</code>, agora com outro papel: "desreferenciar" — ir até o endereço guardado e pegar (ou alterar) o valor que está lá.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">);</span><span class="w">   </span><span class="c1">// imprime 10 (o valor de x, acessado via p)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span><span class="w">               </span><span class="c1">// altera x para 20, através de p!</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span><span class="w">     </span><span class="c1">// imprime 20</span>
+</code></pre></div>
+<p>O <code>*</code> em C tem, portanto, dois usos diferentes que costumam confundir no início:</p>
+<table>
+<thead>
+<tr>
+<th>Onde aparece</th>
+<th>O que significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int *p;</code> (numa declaração)</td>
+<td>"<code>p</code> é um ponteiro para <code>int</code>"</td>
+</tr>
+<tr>
+<td><code>*p</code> (fora de uma declaração)</td>
+<td>"o valor que está no endereço guardado em <code>p</code>"</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 6.1</p>
+<p>Sem se preocupar com VisuAlg ou Python desta vez (não há uma tradução direta): escreva um programinha em C que declare um <code>int idade = 30;</code>, um ponteiro <code>int *p</code> apontando para <code>idade</code>, e que:</p>
+<ol>
+<li>imprima o valor de <code>idade</code> acessando diretamente a variável;</li>
+<li>imprima o mesmo valor acessando através de <code>p</code> (com <code>*p</code>);</li>
+<li>altere <code>idade</code> para 31 através de <code>p</code>;</li>
+<li>imprima <code>idade</code> de novo, diretamente, para confirmar que mudou.</li>
+</ol>
+</div>
+<h3 id="63-ponteiros-explicam-o-comportamento-dos-vetores">6.3. Ponteiros explicam o comportamento dos vetores<a class="headerlink" href="#63-ponteiros-explicam-o-comportamento-dos-vetores" title="Permanent link">&para;</a></h3>
+<p>Lembra da Seção 4.2? Vimos que passar um vetor para uma função já permite que a função altere o vetor original, sem precisar de nada especial — diferente de um <code>int</code> comum. Agora dá para explicar o porquê: <strong>o nome de um vetor, usado em uma expressão, na prática "decai" para um ponteiro para a sua primeira posição.</strong></p>
+<p>Isso quer dizer que estas duas declarações de função são, na prática, a mesma coisa:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">dobra</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">tamanho</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">dobra</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">tamanho</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Quando você chama <code>dobra(numeros, 3)</code>, o que é efetivamente passado para a função é o <strong>endereço</strong> da primeira posição de <code>numeros</code> — um ponteiro. Como a função recebe esse endereço (e não uma cópia de todo o vetor), ela consegue alterar diretamente as posições do vetor original através dele. É exatamente o mesmo princípio da Seção 6.2, só que o <code>&amp;</code> já vem "embutido" automaticamente quando você usa o nome de um vetor.</p>
+<p>Isso também explica um detalhe da Seção 4.3 que ficou em aberto: por que <code>scanf("%s", nome)</code> <strong>não</strong> usa <code>&amp;</code> antes de <code>nome</code>, diferente de <code>scanf("%d", &amp;x)</code>. É porque <code>nome</code> já é um vetor — o nome dele já decai para um ponteiro sozinho, então colocar <code>&amp;</code> na frente seria redundante (e daria um tipo errado).</p>
+<p>Uma consequência interessante disso é o cálculo de acessos em memória. O nome do vetor <code>v</code> representa, na realidade, o <strong>endereço base</strong> do vetor na memória (ou seja, o endereço do primeiro elemento, <code>&amp;v[0]</code>). </p>
+<p>Se quisermos acessar, por exemplo, o <strong>quarto elemento</strong> do vetor (índice 3):
+* A forma comum com colchetes é <code>v[3]</code>.
+* Usando aritmética de ponteiros, fazemos <code>*(v + 3)</code> (somamos 3 ao endereço base e desreferenciamos o resultado).</p>
+<p>Por baixo dos panos, o compilador faz a conta: <code>endereço_base + (3 * tamanho_do_tipo_em_bytes)</code>. O resultado dessa soma é o endereço exato do quarto elemento.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">};</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span><span class="w">       </span><span class="c1">// 40 (quarto elemento)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">));</span><span class="w">   </span><span class="c1">// 40 -- exatamente o mesmo elemento!</span>
+</code></pre></div>
+<p>Você não <em>precisa</em> escrever <code>*(v + i)</code> no dia a dia — a sintaxe de colchetes <code>v[i]</code> é muito mais legível e é a que vamos continuar usando. Mas entender que os colchetes são apenas um atalho para aritmética de ponteiros ajuda a perceber por que um vetor em C é tão simples: ele não guarda metadados sobre seu tamanho ou limites, apenas o endereço base inicial.</p>
+<div class="admonition important">
+<p class="admonition-title">Vetores são como ponteiros imutáveis</p>
+<p>Uma diferença crucial para fixar: você pode pensar no nome de um vetor como um <strong>ponteiro imutável</strong>. Isso significa que, uma vez criado, o endereço para o qual ele aponta é fixo e não pode ser alterado. Já um ponteiro comum é uma variável mutável, que pode ser reatribuída para apontar para qualquer lugar.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">};</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w">     </span><span class="c1">// Válido! p agora aponta para o início do vetor (v[0])</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Válido! p agora aponta para o segundo elemento (v[1])</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1">// v = p;  // ERRO DE COMPILAÇÃO! v é imutável, você não pode redefinir o seu endereço base.</span>
+</code></pre></div>
+</div>
+<h3 id="64-ponteiros-explicam-o-comportamento-dos-structs">6.4. Ponteiros explicam o comportamento dos structs<a class="headerlink" href="#64-ponteiros-explicam-o-comportamento-dos-structs" title="Permanent link">&para;</a></h3>
+<p>E a Seção 5.5? Vimos que, ao contrário de vetores, um struct passado normalmente para uma função é <strong>copiado</strong>, e alterações dentro da função não afetam o original. A solução que ficou pendurada era passar um <strong>ponteiro para o struct</strong>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">aumenta_nota</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">aluno</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">).</span><span class="n">nota1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="p">}</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">aumenta_nota</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a1</span><span class="p">);</span>
+</code></pre></div>
+<p>Aqui, <code>a</code> é um ponteiro para <code>struct aluno</code>; <code>&amp;a1</code> calcula o endereço de <code>a1</code> e o passa para a função, do mesmo jeito que fizemos com <code>int</code> na Seção 6.2. </p>
+<p>Dentro da função, para chegar até a variável interna do struct a partir de seu ponteiro, precisamos primeiro desreferenciar o ponteiro <code>a</code> (chegando ao struct físico) e, em seguida, acessar o campo <code>nota1</code>. Fazemos isso escrevendo <code>(*a).nota1</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Por que os parênteses em (*a).nota1 são obrigatórios?</p>
+<p>Em C, o operador de acesso a membros <code>.</code> tem precedência maior do que o operador de desreferência <code>*</code>. Se você escrevesse <code>*a.nota1</code>, o compilador interpretaria como <code>*(a.nota1)</code> (tentar acessar o campo <code>nota1</code> do ponteiro <code>a</code> e depois desreferenciar). Como <code>a</code> é um ponteiro e não possui campos diretamente, isso causaria um erro de compilação. Os parênteses garantem que a desreferência ocorra primeiro.</p>
+</div>
+<p>Escrever <code>(*a).nota1</code> é incômodo, repetitivo e visualmente poluído. Por isso, a linguagem C oferece o operador <strong><code>-&gt;</code></strong>, que serve como um atalho direto para desreferenciar o ponteiro e acessar o campo. </p>
+<p>Na computação, atalhos como este, que simplificam a sintaxe para facilitar a leitura e escrita sem alterar a funcionalidade subjacente do código, são chamados de <strong>açúcar sintático</strong> (syntactic sugar):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">aumenta_nota</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">aluno</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="n">a</span><span class="o">-&gt;</span><span class="n">nota1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span><span class="w">   </span><span class="c1">// Açúcar sintático! Equivalente a (*a).nota1 += 1.0</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Você tem...</th>
+<th>Para acessar um campo, usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>um <code>struct aluno</code> comum (<code>a1</code>)</td>
+<td><code>a1.nota1</code></td>
+</tr>
+<tr>
+<td>um ponteiro para struct (<code>struct aluno *a</code>)</td>
+<td><code>a-&gt;nota1</code> (ou, por extenso, <code>(*a).nota1</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 6.2</p>
+<p>Usando o <code>struct ponto { float x, y; };</code> do Exercício 5.1, escreva uma função <code>void move(struct ponto *p, float dx, float dy)</code> que soma <code>dx</code> a <code>p-&gt;x</code> e <code>dy</code> a <code>p-&gt;y</code>, alterando o ponto original. Teste chamando <code>move(&amp;p1, 1.0, 2.0)</code> e imprimindo <code>p1.x</code> e <code>p1.y</code> antes e depois.</p>
+</div>
+<h3 id="65-por-que-precisamos-de-alocacao-dinamica">6.5. Por que precisamos de alocação dinâmica<a class="headerlink" href="#65-por-que-precisamos-de-alocacao-dinamica" title="Permanent link">&para;</a></h3>
+<p>Todo vetor que vimos até agora tem um tamanho fixo, escrito diretamente no código: <code>int v[50];</code>. Isso é uma limitação real: e se você só souber, em tempo de execução (depois que o usuário digitou alguma coisa), quantas posições vai precisar?</p>
+<p>Em Python, isso nunca é um problema — uma <code>list</code> cresce sozinha conforme você faz <code>append</code>. Em VisuAlg, a limitação é a <strong>mesma</strong> que em C: o tamanho de um <code>vetor</code> também precisa ser conhecido no momento em que ele é declarado. Ou seja, aqui C e VisuAlg estão do mesmo lado, os dois mais rígidos que Python — a diferença é que C oferece uma ferramenta para contornar isso quando necessário (a um custo: você mesmo passa a ser responsável por gerenciar essa memória), enquanto o VisuAlg simplesmente não te dá essa opção.</p>
+<p>A ferramenta chama-se <strong>alocação dinâmica</strong>: pedir, durante a execução do programa, um bloco de memória do tamanho que você precisar naquele momento.</p>
+<h3 id="66-onde-a-memoria-reside-pilha-stack-vs-monte-heap">6.6. Onde a memória reside: Pilha (Stack) vs. Monte (Heap)<a class="headerlink" href="#66-onde-a-memoria-reside-pilha-stack-vs-monte-heap" title="Permanent link">&para;</a></h3>
+<p>Para entender a alocação dinâmica, precisamos saber que o sistema operacional divide a memória RAM que entrega ao nosso programa em regiões com propósitos diferentes. Duas delas são as mais importantes para nós:</p>
+<ul>
+<li><strong>A Pilha (Stack)</strong>:</li>
+<li>É onde vivem as variáveis locais comuns (como <code>int x;</code> ou <code>float notas[10];</code>) declaradas dentro de funções.</li>
+<li>O gerenciamento é <strong>automático</strong>: quando uma função inicia, o compilador empilha suas variáveis na memória. Quando a função termina (<code>return</code>), todo esse espaço é liberado imediatamente.</li>
+<li>O acesso é extremamente rápido, mas o tamanho total da pilha é limitado (geralmente poucos megabytes). Tentar criar um vetor gigante na pilha pode causar um erro grave chamado <em>Stack Overflow</em>.</li>
+<li><strong>O Monte (Heap)</strong>:</li>
+<li>É um grande espaço de memória compartilhada disponível para o programa inteiro (quase toda a RAM disponível na máquina).</li>
+<li>O gerenciamento é <strong>manual</strong>: você precisa pedir memória explicitamente nessa área e, mais importante, você deve devolvê-la manualmente ao sistema.</li>
+<li>Os dados criados no Heap continuam existindo mesmo após a função que os alocou ter terminado. É por isso que podemos alocar um vetor dentro de uma função e retornar seu ponteiro para o programa principal sem que ele seja destruído.</li>
+</ul>
+<p>Isso nos dá um acesso e controle muito maior sobre a memória física em C, mas também traz a responsabilidade de gerenciar esse espaço manualmente, sem depender de um coletor de lixo automático.</p>
+<h3 id="67-malloc-sizeof-e-free">6.7. <code>malloc</code>, <code>sizeof</code> e <code>free</code><a class="headerlink" href="#67-malloc-sizeof-e-free" title="Permanent link">&para;</a></h3>
+<p>A função <code>malloc</code> (da biblioteca <code>&lt;stdlib.h&gt;</code>) reserva um bloco de bytes na memória (na área chamada <em>heap</em>) e devolve um ponteiro para o início desse bloco.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">);</span>
+</code></pre></div>
+<p><code>sizeof(int)</code> calcula quantos bytes um <code>int</code> ocupa nesta máquina (geralmente 4) — usamos isso em vez de escrever <code>4</code> na mão porque o tamanho exato pode variar entre sistemas, e <code>sizeof</code> sempre acerta. O <code>(int*)</code> na frente do <code>malloc</code> converte o resultado (que é genérico) para um ponteiro de <code>int</code>; não é obrigatório em C, mas é uma boa prática e deixa claro para quem lê o código qual é o tipo esperado.</p>
+<p>O uso mais comum de <code>malloc</code>, porém, é para vetores de tamanho decidido em tempo de execução — resolvendo exatamente o problema da Seção 6.5:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Quantos numeros? &quot;</span><span class="p">);</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="p">}</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">}</span>
+</code></pre></div>
+<p>Repare que, uma vez alocado, <code>v</code> se comporta exatamente como um vetor comum — inclusive usando colchetes normalmente (<code>v[i]</code>), graças à equivalência que vimos na Seção 6.3.</p>
+<p>Só que memória alocada com <code>malloc</code> <strong>não é liberada sozinha</strong> quando você termina de usar — diferente de Python e VisuAlg, que gerenciam isso para você. É sua responsabilidade avisar explicitamente que aquele bloco não é mais necessário, com <code>free</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">free</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+</code></pre></div>
+<p>Se você esquecer de chamar <code>free</code>, a memória continua reservada até o programa terminar — isso se chama <strong>vazamento de memória</strong> (<em>memory leak</em>). Em um programa pequeno que roda e termina rápido isso quase não importa, mas em um programa que roda por muito tempo (um servidor, por exemplo) alocando repetidamente sem nunca liberar, o consumo de memória só cresce até travar o sistema.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>C</th>
+<th>VisuAlg</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pede memória para um vetor de tamanho <code>n</code>, decidido em tempo de execução</td>
+<td><code>malloc(n * sizeof(tipo))</code></td>
+<td>não é possível (tamanho precisa ser fixo na declaração)</td>
+<td><code>[0] * n</code>, ou simplesmente <code>append</code> conforme precisa</td>
+</tr>
+<tr>
+<td>libera memória quando não usa mais</td>
+<td>você chama <code>free()</code> manualmente</td>
+<td>não se aplica</td>
+<td>automático (<em>garbage collector</em>)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Todo <code>malloc</code> merece um <code>free</code></p>
+<p>Uma boa disciplina, desde já: cada <code>malloc</code> que você escrever deveria vir acompanhado de um <code>free</code> correspondente, em algum lugar do código, no ponto em que aquela memória deixa de ser necessária.</p>
+</div>
+<h3 id="68-ponteiro-nulo-e-verificacao-de-erros">6.8. Ponteiro nulo e verificação de erros<a class="headerlink" href="#68-ponteiro-nulo-e-verificacao-de-erros" title="Permanent link">&para;</a></h3>
+<p>A memória do computador não é infinita. Se o sistema não conseguir atender a um pedido de <code>malloc</code> (memória livre insuficiente), a função devolve um ponteiro nulo, representado pela constante <code>NULL</code>, em vez de um endereço válido. Programas robustos checam isso:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Erro: memoria insuficiente</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><code>NULL</code> representa "este ponteiro não aponta para lugar nenhum". Tentar desreferenciar um ponteiro <code>NULL</code> (fazer <code>*v</code> quando <code>v</code> é <code>NULL</code>) é um erro grave em tempo de execução — tipicamente o "falha de segmentação" que já mencionamos na Seção 2.5.</p>
+<p>Não existe um conceito exatamente igual em VisuAlg, já que ele não expõe ponteiros. Em Python, o mais próximo é <code>None</code> — um valor especial que representa "nenhum objeto", e que também precisa de cuidado (usar um atributo de algo que é <code>None</code> também dá erro, o <code>AttributeError</code>). A ideia de "isso pode não apontar para nada, confira antes de usar" é parecida nos dois casos, mesmo com mecanismos bem diferentes por baixo.</p>
+<h3 id="69-calloc-e-realloc">6.9. <code>calloc</code> e <code>realloc</code><a class="headerlink" href="#69-calloc-e-realloc" title="Permanent link">&para;</a></h3>
+<p>Duas variações de <code>malloc</code> que valem a pena conhecer:</p>
+<p><strong><code>calloc</code></strong> aloca memória para um vetor de elementos, como <code>malloc</code>, mas já inicializa tudo com zero, e recebe os parâmetros separados (quantidade e tamanho de cada um), em vez de você multiplicar na mão:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">calloc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span><span class="w">   </span><span class="c1">// n posições, todas comecando em 0</span>
+</code></pre></div>
+<p><strong><code>realloc</code></strong> faz um bloco já alocado crescer (ou diminuir), preservando o conteúdo que já existia — útil quando você percebe, no meio do programa, que vai precisar de mais espaço do que pediu inicialmente:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="c1">// ... usa v[0..9] ...</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">realloc</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span><span class="w">   </span><span class="c1">// agora v tem espaço para 20 posições</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1">// os primeiros 10 valores continuam lá; as novas 10 posições tem lixo de memória</span>
+</code></pre></div>
+<p>É basicamente assim que uma <code>list</code> de Python consegue crescer com <code>append</code> sem você perceber: por baixo dos panos, o interpretador Python está fazendo algo parecido com <code>realloc</code> (com uma estratégia mais esperta para não precisar realocar a cada <code>append</code>), só que escondido de você.</p>
+<h3 id="610-um-primeiro-contato-com-listas-encadeadas">6.10. Um primeiro contato com listas encadeadas<a class="headerlink" href="#610-um-primeiro-contato-com-listas-encadeadas" title="Permanent link">&para;</a></h3>
+<p>Na Seção 5.6, ficou um aviso pendente: um struct pode ter, como campo, um ponteiro para <em>outro struct do mesmo tipo</em> — e é assim que se constrói uma <strong>lista encadeada</strong>, a primeira estrutura de dados dinâmica que estamos vendo neste texto.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">valor</span><span class="p">;</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">proximo</span><span class="p">;</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">};</span>
+</code></pre></div>
+<p>Cada <code>no</code> guarda um valor e o endereço do próximo <code>no</code> da lista — ou <code>NULL</code>, se for o último. Para montar uma lista com os valores 10, 20 e 30, alocamos cada nó dinamicamente com <code>malloc</code> e vamos encadeando:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">cabeca</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">n1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="p">));</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">n1</span><span class="o">-&gt;</span><span class="n">valor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">n1</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="n">cabeca</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n1</span><span class="p">;</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">n2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="p">));</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">n2</span><span class="o">-&gt;</span><span class="n">valor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="n">n2</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">n1</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n2</span><span class="p">;</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">n3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="p">));</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">n3</span><span class="o">-&gt;</span><span class="n">valor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">;</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="n">n3</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="n">n2</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n3</span><span class="p">;</span>
+</code></pre></div>
+<p>Para percorrer a lista do início ao fim, usamos um ponteiro auxiliar que vai "andando" de nó em nó, seguindo <code>-&gt;proximo</code>, até chegar em <code>NULL</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">atual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cabeca</span><span class="p">;</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">atual</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">atual</span><span class="o">-&gt;</span><span class="n">valor</span><span class="p">);</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="n">atual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atual</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="p">;</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>E, seguindo a disciplina da Seção 6.7, cada nó alocado com <code>malloc</code> também precisa ser liberado com <code>free</code> quando a lista não for mais usada:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">atual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cabeca</span><span class="p">;</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">atual</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">proximo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atual</span><span class="o">-&gt;</span><span class="n">proximo</span><span class="p">;</span><span class="w">  </span><span class="c1">// guarda antes de liberar!</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">atual</span><span class="p">);</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="n">atual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">proximo</span><span class="p">;</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="p">}</span>
+</code></pre></div>
+<p>Repare por que precisamos guardar <code>atual-&gt;proximo</code> numa variável <strong>antes</strong> de dar <code>free(atual)</code>: depois do <code>free</code>, ler <code>atual-&gt;proximo</code> seria acessar memória que você acabou de devolver ao sistema — um erro clássico.</p>
+<p>Não existe um "vetor de tamanho fixo" nem um "registro" que façam isso em VisuAlg — essa é uma estrutura que só existe porque C tem ponteiros e alocação dinâmica. Em Python, o efeito equivalente (uma sequência de itens ligados uns aos outros) sai de graça com uma <code>list</code> comum, ou, se você quisesse reproduzir a mesma ideia de "nós" explicitamente, com objetos que se referenciam:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">No</span><span class="p">:</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valor</span><span class="p">):</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">valor</span> <span class="o">=</span> <span class="n">valor</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">proximo</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">n1</span> <span class="o">=</span> <span class="n">No</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">n2</span> <span class="o">=</span> <span class="n">No</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">n3</span> <span class="o">=</span> <span class="n">No</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">n1</span><span class="o">.</span><span class="n">proximo</span> <span class="o">=</span> <span class="n">n2</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="n">n2</span><span class="o">.</span><span class="n">proximo</span> <span class="o">=</span> <span class="n">n3</span>
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="n">cabeca</span> <span class="o">=</span> <span class="n">n1</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="n">atual</span> <span class="o">=</span> <span class="n">cabeca</span>
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="k">while</span> <span class="n">atual</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">atual</span><span class="o">.</span><span class="n">valor</span><span class="p">)</span>
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>    <span class="n">atual</span> <span class="o">=</span> <span class="n">atual</span><span class="o">.</span><span class="n">proximo</span>
+</code></pre></div>
+<p>Note como o código Python e o código C, aqui, ficam <strong>estruturalmente parecidos</strong> — a diferença é que em Python <code>No(10)</code> já aloca o objeto automaticamente (sem <code>malloc</code>) e nunca precisa de <code>free</code>; a lógica de percorrer a lista com um ponteiro/referência "andando" (<code>atual = atual.proximo</code> / <code>atual = atual-&gt;proximo</code>) é essencialmente a mesma ideia nas duas linguagens.</p>
+<div class="admonition question">
+<p class="admonition-title">Exercício de mapeamento 6.3</p>
+<p>Não existe VisuAlg ou Python "pronto" para traduzir desta vez — o exercício é o caminho inverso. Usando o código Python da lista encadeada acima como roteiro conceitual (não para traduzir literalmente, e sim como guia de "o que a lista precisa fazer"), escreva uma função em C:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="o">*</span><span class="w"> </span><span class="n">insere_no_inicio</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">no</span><span class="w"> </span><span class="o">*</span><span class="n">cabeca</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">valor</span><span class="p">);</span>
+</code></pre></div>
+<p>que aloca um novo nó com <code>malloc</code>, guarda <code>valor</code> nele, faz o <code>proximo</code> do novo nó apontar para a antiga <code>cabeca</code>, e devolve o novo nó como a nova cabeça da lista. Teste chamando essa função três vezes seguidas para inserir 30, depois 20, depois 10, e percorra a lista resultante imprimindo cada valor (deve sair 10, 20, 30, nessa ordem).</p>
+<details class="tip">
+<summary>Dica, não gabarito</summary>
+<p>O corpo da função é bem parecido com o trecho que criou <code>n1</code> manualmente acima, só que usando o parâmetro <code>valor</code> no lugar do número fixo, e <code>cabeca</code> (o parâmetro recebido) no lugar de <code>NULL</code>/do nó anterior.</p>
+</details>
+</div>
+<h3 id="611-lista-de-exercicios">6.11. Lista de exercícios<a class="headerlink" href="#611-lista-de-exercicios" title="Permanent link">&para;</a></h3>
+<h4 id="conceituais">Conceituais<a class="headerlink" href="#conceituais" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Um ponteiro é: (a) o endereço de uma variável; (b) uma variável que armazena endereços; (c) o valor de uma variável; (d) um indicador da próxima variável acessada. Escolha a alternativa correta e explique por que as outras estão erradas.</li>
+<li>Qual é o significado do operador <code>*</code> em cada um dos seguintes casos?<ul>
+<li><code>int *p;</code></li>
+<li><code>printf("%d", *p);</code></li>
+<li><code>*p = x * 5;</code></li>
+<li><code>printf("%d", *(p + 1));</code></li>
+</ul>
+</li>
+<li>
+<p>Considere:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p - %d - %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">));</span>
+</code></pre></div>
+<p>Supondo que <code>i</code> ocupa o endereço <code>4094</code> na memória, qual é a saída deste programa?
+4. Considere:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">iVar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">jVar</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">pPont</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">qPont</span><span class="p">;</span>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">pPont</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">iVar</span><span class="p">;</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">jVar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">pPont</span><span class="p">);</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">qPont</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pPont</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</code></pre></div>
+<p>Supondo que os endereços de <code>iVar</code>, <code>jVar</code>, <code>pPont</code> e <code>qPont</code> sejam, respectivamente, <code>1080</code>, <code>1084</code>, <code>1088</code> e <code>1096</code>: (a) depois da linha 3, qual é o valor de <code>pPont</code>? (b) depois da linha 4, qual é o valor de <code>jVar</code>? (c) depois da linha 5, qual é o valor de <code>qPont</code> — e por que ele não é simplesmente <code>1080 + 2</code>?
+5. Considere:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pti</span><span class="p">;</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">pti</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">i</span><span class="p">;</span>
+</code></pre></div>
+<p>Qual das afirmativas abaixo é <strong>falsa</strong>? (a) <code>pti</code> armazena o endereço de <code>i</code>; (b) <code>*pti</code> é igual a <code>10</code>; (c) ao se executar <code>*pti = 20;</code>, <code>i</code> passa a ter o valor 20; (d) ao se alterar o valor de <code>i</code>, <code>*pti</code> também muda; (e) <code>pti</code> é igual a <code>10</code>.
+6. Considere:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kt">float</span><span class="w"> </span><span class="n">f</span><span class="p">;</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">pf</span><span class="p">;</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="n">pf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">f</span><span class="p">;</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">pf</span><span class="p">);</span>
+</code></pre></div>
+<p>O que acontece nessa última linha? (a) efetuamos a leitura de <code>f</code> normalmente; (b) não efetuamos a leitura de <code>f</code>; (c) há um erro de sintaxe; (d) deveríamos estar usando <code>&amp;pf</code> no <code>scanf</code>. Justifique com o que vimos na Seção 6.3.
+7. <em>(mais difícil — ponteiro para ponteiro)</em> Um ponteiro pode apontar para outro ponteiro — declarado com dois asteriscos, como em <code>int **q;</code> ("<code>q</code> é um ponteiro para um ponteiro para <code>int</code>"). Considere:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="o">**</span><span class="n">q</span><span class="p">;</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">p</span><span class="p">;</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">q</span><span class="p">);</span><span class="w">   </span><span class="c1">// isto tem um erro -- qual?</span>
+</code></pre></div>
+<p>O programa deveria imprimir <code>10</code>, mas tem um erro. Encontre-o e corrija-o (dica: quantas vezes você precisa "desreferenciar" <code>q</code> para chegar até o valor de <code>x</code>?).</p>
+</li>
+</ol>
+<h4 id="programacao">Programação<a class="headerlink" href="#programacao" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Escreva uma função <code>void troca(int *a, int *b)</code> que troca os valores de duas variáveis <code>int</code> através de ponteiros. Teste no <code>main</code> com duas variáveis, imprimindo os valores antes e depois de chamar <code>troca</code>.</li>
+<li>Faça um programa que leia um valor <code>n</code> do usuário, aloque dinamicamente (com <code>malloc</code>) um vetor de <code>n</code> inteiros, leia os <code>n</code> valores, calcule e imprima a soma e a média, e por fim libere a memória com <code>free</code>.</li>
+<li>Refaça o Exercício 1 da lista do Capítulo 4 (vetor lido do usuário, com N decidido em tempo de execução) usando <code>malloc</code> no lugar de um vetor de tamanho fixo — agora sem precisar de um "tamanho máximo" definido de antemão no código.</li>
+</ol>
+<h4 id="listas-encadeadas">Listas encadeadas<a class="headerlink" href="#listas-encadeadas" title="Permanent link">&para;</a></h4>
+<p>Use o <code>struct no</code> da Seção 6.10 (<code>struct no { int valor; struct no *proximo; };</code>) e a função <code>insere_no_inicio</code> do Exercício 6.3 como ponto de partida.</p>
+<ol>
+<li>Escreva uma função <code>int soma_lista(struct no *cabeca)</code> que percorre a lista e devolve a soma de todos os valores.</li>
+<li>Escreva uma função <code>int conta_nos(struct no *cabeca)</code> que devolve quantos nós tem a lista.</li>
+<li>Escreva uma função <code>int pertence(struct no *cabeca, int valor)</code> que devolve <code>1</code> se <code>valor</code> está em algum nó da lista, ou <code>0</code> caso contrário.</li>
+<li>Escreva uma função <code>void libera_lista(struct no *cabeca)</code> que libera (com <code>free</code>) todos os nós da lista, um por um — igual ao trecho de código mostrado no fim da Seção 6.10, mas como uma função reutilizável.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "content.code.copy", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
