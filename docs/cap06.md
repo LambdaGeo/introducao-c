@@ -359,7 +359,8 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
     - `printf("%d", *p);`
     - `*p = x * 5;`
     - `printf("%d", *(p + 1));`
-3. Considere:
+3. Considere `int i = 3, j = 5; int *p, *q; p = &i; q = &j;`. Determine os valores das expressões: (a) `p == &i`; (b) `*p - *q`; (c) `**&p`; (d) `3 * -*p / (*q) + 7`.
+4. Considere:
 
     ```c
     int i = 5, *p;
@@ -368,7 +369,18 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
     ```
 
     Supondo que `i` ocupa o endereço `4094` na memória, qual é a saída deste programa?
-4. Considere:
+5. Considere:
+
+    ```c
+    int main() {
+        int i = 5, *p;
+        p = &i;
+        printf("%x %d %d %d %d\n", p, *p + 2, **&p, 3 * *p, **&p + 4);
+    }
+    ```
+
+    Supondo que `i` ocupa o endereço `4094`, qual é a saída deste programa?
+6. Considere:
 
     ```c
     int iVar = 15;
@@ -379,7 +391,7 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
     ```
 
     Supondo que os endereços de `iVar`, `jVar`, `pPont` e `qPont` sejam, respectivamente, `1080`, `1084`, `1088` e `1096`: (a) depois da linha 3, qual é o valor de `pPont`? (b) depois da linha 4, qual é o valor de `jVar`? (c) depois da linha 5, qual é o valor de `qPont` — e por que ele não é simplesmente `1080 + 2`?
-5. Considere:
+7. Considere:
 
     ```c
     int *pti;
@@ -388,7 +400,8 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
     ```
 
     Qual das afirmativas abaixo é **falsa**? (a) `pti` armazena o endereço de `i`; (b) `*pti` é igual a `10`; (c) ao se executar `*pti = 20;`, `i` passa a ter o valor 20; (d) ao se alterar o valor de `i`, `*pti` também muda; (e) `pti` é igual a `10`.
-6. Considere:
+8. Se `i` e `j` são inteiros, e `p` e `q` são ponteiros para `int`, identifique quais das expressões abaixo são **ilegais** e por quê: (a) `p = &i;`; (b) `*q = &j;`; (c) `p = &*&i;`; (d) `i = (*&)j;`; (e) `i = *&j;`; (f) `i = *&*&j;`; (g) `q = *p;`; (h) `i = (*p)++ + *q;`.
+9. Considere:
 
     ```c
     float f;
@@ -398,7 +411,7 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
     ```
 
     O que acontece nessa última linha? (a) efetuamos a leitura de `f` normalmente; (b) não efetuamos a leitura de `f`; (c) há um erro de sintaxe; (d) deveríamos estar usando `&pf` no `scanf`. Justifique com o que vimos na Seção 6.3.
-7. *(mais difícil — ponteiro para ponteiro)* Um ponteiro pode apontar para outro ponteiro — declarado com dois asteriscos, como em `int **q;` ("`q` é um ponteiro para um ponteiro para `int`"). Considere:
+10. *(mais difícil — ponteiro para ponteiro)* Um ponteiro pode apontar para outro ponteiro — declarado com dois asteriscos, como em `int **q;` ("`q` é um ponteiro para um ponteiro para `int`"). Considere:
 
     ```c
     int x, *p, **q;
@@ -412,15 +425,20 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
 
 #### Programação
 
-8. Escreva uma função `void troca(int *a, int *b)` que troca os valores de duas variáveis `int` através de ponteiros. Teste no `main` com duas variáveis, imprimindo os valores antes e depois de chamar `troca`.
-9. Faça um programa que leia um valor `n` do usuário, aloque dinamicamente (com `malloc`) um vetor de `n` inteiros, leia os `n` valores, calcule e imprima a soma e a média, e por fim libere a memória com `free`.
-10. Refaça o Exercício 1 da lista do Capítulo 4 (vetor lido do usuário, com N decidido em tempo de execução) usando `malloc` no lugar de um vetor de tamanho fixo — agora sem precisar de um "tamanho máximo" definido de antemão no código.
+11. Crie um programa que: declare um inteiro `numero` com valor `35`; use um ponteiro `ptr` para modificar o valor de `numero`; exiba mensagens antes e depois da modificação, utilizando apenas o ponteiro (ex.: "O ponteiro ptr armazena o endereço ___ que, por sua vez, armazena o valor ___").
+12. Escreva uma função que receba uma variável como parâmetro e imprima o seu endereço de memória.
+13. Escreva uma função `void troca(int *a, int *b)` que troca os valores de duas variáveis `int` através de ponteiros. Teste no `main` com duas variáveis, imprimindo os valores antes e depois de chamar `troca`.
+14. Faça um programa que leia um valor `n` do usuário, aloque dinamicamente (com `malloc`) um vetor de `n` inteiros, leia os `n` valores, calcule e imprima a soma e a média, e por fim libere a memória com `free`.
+15. Refaça o Exercício 1 da lista do Capítulo 4 (vetor lido do usuário, com N decidido em tempo de execução) usando `malloc` no lugar de um vetor de tamanho fixo — agora sem precisar de um "tamanho máximo" definido de antemão no código.
+16. Implemente uma função `Produto *cria_produto(void)` que não recebe parâmetros e: (a) aloca dinamicamente memória para um `struct Produto` (definido na lista de exercícios do Capítulo 5); (b) verifica se a alocação foi bem-sucedida; (c) pede ao usuário os dados do produto; (d) retorna o ponteiro para a área alocada e preenchida.
+17. Faça um programa que pergunte ao usuário quantos produtos ele deseja cadastrar (`n`) e então: (a) aloque dinamicamente um vetor de `n` posições para `Produto`s; (b) verifique se a alocação foi bem-sucedida; (c) preencha o vetor com os dados de `n` produtos informados pelo usuário; (d) imprima os dados de todos os produtos; (e) libere a memória alocada ao final.
+18. Escreva uma função `int busca_produto_por_codigo(Produto vet[], int n, int codigo)` que percorre um vetor de `Produto`s e: se encontrar um produto com o código correspondente, retorna o **índice** desse produto; se não encontrar, retorna **-1**.
 
 #### Listas encadeadas
 
 Use o `struct no` da Seção 6.10 (`struct no { int valor; struct no *proximo; };`) e a função `insere_no_inicio` do Exercício 6.3 como ponto de partida.
 
-11. Escreva uma função `int soma_lista(struct no *cabeca)` que percorre a lista e devolve a soma de todos os valores.
-12. Escreva uma função `int conta_nos(struct no *cabeca)` que devolve quantos nós tem a lista.
-13. Escreva uma função `int pertence(struct no *cabeca, int valor)` que devolve `1` se `valor` está em algum nó da lista, ou `0` caso contrário.
-14. Escreva uma função `void libera_lista(struct no *cabeca)` que libera (com `free`) todos os nós da lista, um por um — igual ao trecho de código mostrado no fim da Seção 6.10, mas como uma função reutilizável.
+19. Escreva uma função `int soma_lista(struct no *cabeca)` que percorre a lista e devolve a soma de todos os valores.
+20. Escreva uma função `int conta_nos(struct no *cabeca)` que devolve quantos nós tem a lista.
+21. Escreva uma função `int pertence(struct no *cabeca, int valor)` que devolve `1` se `valor` está em algum nó da lista, ou `0` caso contrário.
+22. Escreva uma função `void libera_lista(struct no *cabeca)` que libera (com `free`) todos os nós da lista, um por um — igual ao trecho de código mostrado no fim da Seção 6.10, mas como uma função reutilizável.

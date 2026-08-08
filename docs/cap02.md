@@ -502,26 +502,38 @@ funcao gcd(a, b: inteiro): inteiro
 
 ### 2.7. Lista de exercícios
 
+#### Aritmética e operadores
+
+1. Leia um número inteiro e imprima a soma do sucessor do seu triplo com o antecessor do seu dobro.
+2. Faça um programa para ler o horário (hora, minuto e segundo) de início e a duração, em segundos, de uma experiência biológica. O programa deve informar o horário de término.
+
 #### Estruturas condicionais
 
-1. Faça um programa que leia um número do usuário e determine se este número é par ou ímpar.
-2. Faça um programa que receba valores inteiros X, Y e Z do usuário e determine se estes valores podem formar os lados de um triângulo. Em caso afirmativo, informe se o triângulo é equilátero, isósceles ou escaleno.
-3. Faça um programa que receba um símbolo de operação do usuário (`+`, `-`, `/` ou `*`) e dois números reais, e retorne o resultado da operação sobre esses dois números (dica: o símbolo pode ser lido como um `char`, com `scanf(" %c", &op);` — repare no espaço antes do `%c`, que evita problemas com quebras de linha deixadas no buffer).
+3. Faça um programa que leia um número do usuário e determine se este número é par ou ímpar.
+4. Faça um programa que receba valores inteiros X, Y e Z do usuário e determine se estes valores podem formar os lados de um triângulo. Em caso afirmativo, informe se o triângulo é equilátero, isósceles ou escaleno.
+5. Determine se um determinado ano lido é bissexto.
+6. Faça um programa que receba um símbolo de operação do usuário (`+`, `-`, `/` ou `*`) e dois números reais, e retorne o resultado da operação sobre esses dois números (dica: o símbolo pode ser lido como um `char`, com `scanf(" %c", &op);` — repare no espaço antes do `%c`, que evita problemas com quebras de linha deixadas no buffer).
 
 #### Estruturas de repetição
 
-4. O número 3025 tem a seguinte característica: 30 + 25 = 55, e 55×55 = 3025. Faça um programa para encontrar todos os números de 4 algarismos com a mesma característica do número 3025.
-5. Faça um programa que mostre os 100 primeiros termos da sequência de Fibonacci.
-6. Um método para calcular uma raiz quadrada aproximada:
+7. Dado `n`, calcule a soma dos `n` primeiros números inteiros positivos.
+8. Faça um programa que receba vários números, até que se digite 0. Calcule e mostre: (a) a soma dos números digitados; (b) a quantidade de números digitados.
+9. Dado um `n`, calcule a somatória dos `n` elementos da sequência geométrica `s = 1 + 3 + 9 + 27 + 81 + ...` (ou seja, $s = \sum 3^i$, de $i = 0$ a $n-1$).
+10. Dados o número `n` de alunos de uma turma e suas notas da primeira prova, determine a maior e a menor nota obtidas.
+11. O número 3025 tem a seguinte característica: 30 + 25 = 55, e 55×55 = 3025. Faça um programa para encontrar todos os números de 4 algarismos com a mesma característica do número 3025.
+12. Faça um programa que mostre os 100 primeiros termos da sequência de Fibonacci.
+13. Um método para calcular uma raiz quadrada aproximada:
     1. Comece testando um `g` qualquer.
     2. Se `g*g` está suficientemente perto de `x`, então `g` é uma boa aproximação da raiz quadrada de `x` — fim.
     3. Senão, crie um novo `g`, que é a média entre `g` e `x/g` (ou seja, `g = (g + x/g) / 2`).
     4. Com o novo `g`, volte ao passo 2.
 
     Implemente esse método em C, usando um `while`.
-7. Uma outra forma de calcular a raiz quadrada de um número: subtraia dele os ímpares consecutivos a partir de 1, até que o resultado fique menor ou igual a zero. O número de subtrações feitas é a raiz quadrada exata (se o resultado final for exatamente 0) ou aproximada do número. Exemplo, para 16: 16 − 1 = 15, 15 − 3 = 12, 12 − 5 = 7, 7 − 7 = 0 → 4 subtrações, e de fato √16 = 4.
-8. Faça um programa que receba dois números do usuário e calcule o MDC (máximo divisor comum) entre eles usando o método de Euclides. O programa deve continuar pedindo pares de números até que o usuário digite 0 e 0.
-9. Faça um programa que encontre todos os pares de números amigáveis entre 1 e 10000. Um par de números é amigável quando cada um deles é igual à soma dos divisores do outro (excluindo ele mesmo). Exemplo: 220 e 284 são amigáveis.
-10. *(desafio, com uma função nova)* Faça um programa que sorteie um número entre 0 e 500, e pergunte ao usuário, repetidamente, qual é o "número mágico". A cada tentativa, o programa deve dizer se o número secreto é maior ou menor que a tentativa, e contar quantas tentativas foram feitas. Ao acertar, classifique o usuário: 1 a 3 tentativas — muito sortudo; 4 a 6 — sortudo; 7 a 10 — normal; mais que 10 — tente novamente.
+14. Uma outra forma de calcular a raiz quadrada de um número: subtraia dele os ímpares consecutivos a partir de 1, até que o resultado fique menor ou igual a zero. O número de subtrações feitas é a raiz quadrada exata (se o resultado final for exatamente 0) ou aproximada do número. Exemplo, para 16: 16 − 1 = 15, 15 − 3 = 12, 12 − 5 = 7, 7 − 7 = 0 → 4 subtrações, e de fato √16 = 4.
+15. Um número é dito **perfeito** quando é igual à soma de seus divisores, excluindo ele mesmo. Escreva uma função `int eh_perfeito(int n)` que verifique essa propriedade (exemplo: `eh_perfeito(6)` → divisores 1, 2, 3 → 1+2+3=6 → verdadeiro).
+16. Escreva uma função `int divide(int a, int b)` que faça a divisão inteira de `a` por `b` usando apenas **subtrações sucessivas** (exemplo: `divide(10, 3)` → 10−3=7 → 7−3=4 → 4−3=1 → resultado 3).
+17. Faça um programa que receba dois números do usuário e calcule o MDC (máximo divisor comum) entre eles usando o método de Euclides. O programa deve continuar pedindo pares de números até que o usuário digite 0 e 0.
+18. Faça um programa que encontre todos os pares de números amigáveis entre 1 e 10000. Um par de números é amigável quando cada um deles é igual à soma dos divisores do outro (excluindo ele mesmo). Exemplo: 220 e 284 são amigáveis.
+19. *(desafio, com uma função nova)* Faça um programa que sorteie um número entre 0 e 500, e pergunte ao usuário, repetidamente, qual é o "número mágico". A cada tentativa, o programa deve dizer se o número secreto é maior ou menor que a tentativa, e contar quantas tentativas foram feitas. Ao acertar, classifique o usuário: 1 a 3 tentativas — muito sortudo; 4 a 6 — sortudo; 7 a 10 — normal; mais que 10 — tente novamente.
 
     Para sortear um número, você vai precisar de uma função que ainda não vimos no texto: `rand()`, da biblioteca `<stdlib.h>`. `rand() % 501` gera um número pseudoaleatório entre 0 e 500. Se quiser que a sequência sorteada mude a cada execução, pesquise também sobre `srand(time(NULL))` (da biblioteca `<time.h>`), chamada uma única vez no início do `main`.
