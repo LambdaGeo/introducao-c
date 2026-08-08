@@ -320,11 +320,27 @@ Repare como, de novo, o Python é o único dos três que consegue inicializar a 
 
 #### Vetores
 
-1. Faça um programa que leia N valores (N informado pelo usuário, até um máximo de 100), guarde-os em um vetor, e imprima: (a) o maior valor; (b) a média dos valores; (c) os valores em ordem crescente; (d) o subconjunto de valores primos contidos no vetor.
-2. Faça um programa que preencha um vetor de inteiros com 10 posições e imprima: o maior elemento, o menor elemento, a soma de todos os elementos, e a média aritmética entre eles.
-3. Faça um programa que, dadas duas matrizes A e B de dimensão 5×5 (`int a[5][5];` declara uma matriz 5×5 de inteiros; acessa-se com `a[i][j]`), calcule e imprima: (a) a soma das duas matrizes; (b) a soma dos elementos da diagonal principal de cada matriz; (c) o produto das duas matrizes.
-4. Em um tabuleiro de xadrez 8×8, cada posição guarda um código: `0` = ausência de peça, `1` = peão, `2` = cavalo, `3` = torre, `4` = bispo, `5` = rei, `6` = rainha. Leia um tabuleiro 8×8 (64 valores) para uma matriz `int tabuleiro[8][8]` e calcule: (a) a soma entre a quantidade de peões e de bispos; (b) a quantidade de posições sem peça alguma.
-5. A tabela abaixo dá a distância, em km, entre 5 cidades:
+1. Leia um vetor `N[20]`, encontre o **menor valor** armazenado e a **posição** desse valor no vetor.
+2. Leia um vetor `K[30]` e troque todos os elementos de **índice ímpar** com o **elemento par imediatamente posterior** (posição 1↔2, 3↔4, 5↔6, e assim por diante, com cuidado para não sair dos limites do vetor).
+3. Leia um vetor `S[20]` e uma variável `A`. Em seguida, imprima o **produto de A por cada elemento** do vetor (exemplo: se `A = 2` e `S = {1, 2, 3}`, a saída deve ser `2, 4, 6`).
+4. Leia um vetor com 20 números inteiros e mostre: (a) todos os elementos; (b) quantos **valores pares** existem no vetor.
+5. Dado o vetor `int vet[] = {7, 3, 1, 5, 13, 11, 9, 15};` e o código abaixo:
+
+    ```c
+    int x, i;
+    for (i = 0; i < 8; i++) {
+        x = vet[i];
+        vet[i] = vet[7 - i];
+        vet[7 - i] = x;
+    }
+    ```
+
+    Sem executar, determine qual será a configuração final do vetor após a execução do código.
+6. Faça um programa que leia N valores (N informado pelo usuário, até um máximo de 100), guarde-os em um vetor, e imprima: (a) o maior valor; (b) a média dos valores; (c) os valores em ordem crescente; (d) o subconjunto de valores primos contidos no vetor.
+7. Faça um programa que preencha um vetor de inteiros com 10 posições e imprima: o maior elemento, o menor elemento, a soma de todos os elementos, e a média aritmética entre eles.
+8. Faça um programa que, dadas duas matrizes A e B de dimensão 5×5 (`int a[5][5];` declara uma matriz 5×5 de inteiros; acessa-se com `a[i][j]`), calcule e imprima: (a) a soma das duas matrizes; (b) a soma dos elementos da diagonal principal de cada matriz; (c) o produto das duas matrizes.
+9. Em um tabuleiro de xadrez 8×8, cada posição guarda um código: `0` = ausência de peça, `1` = peão, `2` = cavalo, `3` = torre, `4` = bispo, `5` = rei, `6` = rainha. Leia um tabuleiro 8×8 (64 valores) para uma matriz `int tabuleiro[8][8]` e calcule: (a) a soma entre a quantidade de peões e de bispos; (b) a quantidade de posições sem peça alguma.
+10. A tabela abaixo dá a distância, em km, entre 5 cidades:
 
     | | Cidade 1 | Cidade 2 | Cidade 3 | Cidade 4 | Cidade 5 |
     |---|---|---|---|---|---|
@@ -335,8 +351,8 @@ Repare como, de novo, o Python é o único dos três que consegue inicializar a 
     | **Cidade 5** | 15 | 20 | 25 | 22 | 0 |
 
     Guarde essa tabela em uma matriz `int dist[5][5]` já inicializada no código (uma matriz literal, como vimos na Seção 4.1) e escreva um programa que: (a) leia pares de códigos de cidade (1 a 5) e informe a distância entre elas, repetindo até que o usuário digite 0 e 0; (b) dado um percurso informado como uma sequência de códigos de cidade (por exemplo, `1 2 3 2 5 1 4`), imprima a distância total percorrida, somando a distância entre cada cidade e a próxima da sequência.
-6. Um cinema com capacidade para 20 lugares está sempre lotado. Em uma sessão, cada um dos 20 espectadores respondeu um questionário com sua idade e sua opinião sobre o filme (uma string: `"otimo"`, `"bom"`, `"regular"`, `"ruim"` ou `"pessimo"`). Leia esses 20 pares (idade, opinião) e calcule: (a) a quantidade de respostas `"otimo"`; (b) a diferença percentual entre respostas `"bom"` e `"regular"`; (c) a média de idade das pessoas que responderam `"ruim"`; (d) a maior idade entre quem respondeu `"pessimo"`. Use `strcmp` para comparar as opiniões — lembre-se de que `==` não funciona para strings, como vimos na Seção 4.4.
-7. Considere o programa abaixo, que lê as notas de uma turma e calcula estatísticas:
+11. Um cinema com capacidade para 20 lugares está sempre lotado. Em uma sessão, cada um dos 20 espectadores respondeu um questionário com sua idade e sua opinião sobre o filme (uma string: `"otimo"`, `"bom"`, `"regular"`, `"ruim"` ou `"pessimo"`). Leia esses 20 pares (idade, opinião) e calcule: (a) a quantidade de respostas `"otimo"`; (b) a diferença percentual entre respostas `"bom"` e `"regular"`; (c) a média de idade das pessoas que responderam `"ruim"`; (d) a maior idade entre quem respondeu `"pessimo"`. Use `strcmp` para comparar as opiniões — lembre-se de que `==` não funciona para strings, como vimos na Seção 4.4.
+12. Considere o programa abaixo, que lê as notas de uma turma e calcula estatísticas:
 
     ```c
     #include <stdio.h>
@@ -394,7 +410,13 @@ Repare como, de novo, o Python é o único dos três que consegue inicializar a 
 
 #### Strings
 
-8. Faça um programa que leia uma palavra (sem espaços) e conte quantas vogais ela tem.
-9. Faça um programa que leia uma palavra (sem espaços) e diga se ela é um palíndromo — isto é, se lida de trás para frente é igual à original (ex.: `"arara"`, `"osso"`).
-10. Faça um programa que leia uma palavra e a imprima invertida (ex.: entrada `"programa"`, saída `"amargorp"`).
-11. Faça um programa que leia um vetor de 5 palavras (`char nomes[5][20]`, como na Seção 4.5) e as imprima em ordem alfabética. (Dica: `strcmp(a, b)` devolve um valor negativo se `a` vem antes de `b` em ordem alfabética, positivo se vem depois, e 0 se são iguais — dá para usar isso no lugar de `<`/`>` dentro de um algoritmo de ordenação como o que você já deve conhecer de Python/VisuAlg.)
+13. Faça um programa que leia uma palavra (sem espaços) e conte quantas vogais ela tem.
+14. Faça um programa que leia uma palavra (sem espaços) e diga se ela é um palíndromo — isto é, se lida de trás para frente é igual à original (ex.: `"arara"`, `"osso"`).
+15. Faça um programa que detecte se uma **frase** é um palíndromo, **ignorando espaços e o caractere hífen `-`** (exemplos: `"Socorram-me subi no onibus em Marrocos"`, `"Omitiram radar maritimo"`).
+16. Faça um programa que leia uma palavra e a imprima invertida (ex.: entrada `"programa"`, saída `"amargorp"`).
+17. Baseado no exercício 13, mostre quantas vezes aparece **cada vogal** em uma frase, separando maiúsculas e minúsculas (exemplo, para `"Eu gosto de programar"`: `a=2; e=1; i=0; o=3; u=1` e `A=0; E=1; I=0; O=0; U=0`).
+18. Implemente uma cifra de César: desloque cada letra de uma frase em `n` posições no alfabeto. Crie dois programas — um que criptografa a frase com base numa chave `n`, e outro que descriptografa usando a mesma chave (exemplo, com `n=2`: `"Eu gosto de programar"` deve virar `"Gw iquvq fg rtqitcoct"`).
+19. Receba uma letra e uma frase digitadas pelo usuário, e conte quantas vezes essa letra aparece na frase.
+20. Receba uma string `s` e dois caracteres `ch1` e `ch2`, e substitua todas as ocorrências de `ch1` por `ch2` na string.
+21. Receba uma string e converta todos os caracteres para maiúsculo.
+22. Faça um programa que leia um vetor de 5 palavras (`char nomes[5][20]`, como na Seção 4.5) e as imprima em ordem alfabética. (Dica: `strcmp(a, b)` devolve um valor negativo se `a` vem antes de `b` em ordem alfabética, positivo se vem depois, e 0 se são iguais — dá para usar isso no lugar de `<`/`>` dentro de um algoritmo de ordenação como o que você já deve conhecer de Python/VisuAlg.)
