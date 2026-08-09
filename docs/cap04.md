@@ -242,6 +242,9 @@ fimalgoritmo
 
 Note que `strcat(nome, sobrenome)` exige que o vetor `nome` já tenha espaço sobrando para caber o resultado da concatenação — se `nome` tivesse sido declarado com tamanho exato para "Sergio" (7 posições, contando o `\0`), o `strcat` escreveria além do fim do vetor. Mais um lugar onde C confia inteiramente em você para reservar espaço suficiente.
 
+!!! warning "strcpy e strcat também não checam limites"
+    Assim como o `scanf("%s", ...)` da Seção 4.3, nem `strcpy` nem `strcat` sabem o tamanho do vetor de destino — se a string de origem (ou o resultado da concatenação) não couber, eles escrevem além do fim do vetor sem avisar, o mesmo tipo de comportamento sem checagem de limites que vimos na [Seção 2.5](cap02.md#25-arrays). Existem variantes mais seguras, como `strncpy` (que recebe um tamanho máximo) e `snprintf`, mas isso fica para mais adiante — por enquanto, o cuidado prático é sempre declarar o vetor de destino com folga suficiente.
+
 !!! question "Exercício de mapeamento 4.2"
     Em Python:
 

@@ -23,9 +23,33 @@ Este é também o primeiro capítulo em que Python e VisuAlg não têm muito o q
     
     O VisuAlg segue o caminho oposto: ele não expõe endereços e faz cópias de registros por padrão. O C está no meio, dando a você controle direto e explícito sobre esses ponteiros para ler e escrever em qualquer posição da memória.
 
+### 6.0. Onde as variáveis moram
+
+Antes de ver a sintaxe de ponteiro, vale construir a imagem mental certa. Quando um programa roda, cada variável ocupa um espaço físico na memória RAM do computador. Esse espaço tem três características, sempre:
+
+- um **endereço** (um número que identifica *onde* ele fica — pense nisso como o "número da casa" da variável na memória);
+- um **tamanho**, que depende do tipo (um `int` costuma ocupar 4 bytes, um `double`, 8 bytes);
+- um **valor**, o conteúdo guardado ali.
+
+Imagine o seguinte trecho:
+
+```c
+int idade = 30;
+double altura = 1.75;
+```
+
+Você pode imaginar a memória, nesse ponto do programa, mais ou menos assim (os endereços são inventados, só para ilustrar — na prática eles variam a cada execução):
+
+| Variável | Endereço (exemplo) | Tamanho | Valor |
+|---|---|---|---|
+| `idade`  | `0x7ffee3a1b4a8` | 4 bytes | `30` |
+| `altura` | `0x7ffee3a1b4b0` | 8 bytes | `1.75` |
+
+Até agora, você só usou a coluna "Valor" — todo o Python e o VisuAlg que você já escreveu manipula variáveis só por esse lado. C te dá acesso também à coluna "Endereço", e é exatamente isso que os operadores `&` e `*` fazem. É só isso que um ponteiro é: uma variável que guarda, na coluna "Valor", um número da coluna "Endereço" de uma outra variável.
+
 ### 6.1. Endereços de memória e o operador `&`
 
-Toda variável, quando o programa está rodando, ocupa um endereço na memória do computador — um número que identifica *onde* aquele valor está guardado. Em C, você pode descobrir esse endereço com o operador `&` ("endereço de"):
+Como vimos na Seção 6.0, toda variável tem um endereço. Em C, você pode descobrir esse endereço com o operador `&` ("endereço de"):
 
 ```c
 int x = 10;
@@ -36,7 +60,16 @@ Isso talvez já pareça familiar: toda vez que você escreveu `scanf("%d", &x);`
 
 ### 6.2. Ponteiros: guardando um endereço em uma variável
 
-Um **ponteiro** é uma variável cujo valor é um endereço de memória — geralmente o endereço de uma outra variável. Declara-se um ponteiro com um `*` antes do nome:
+Um **ponteiro** é uma variável cujo valor é um endereço de memória — geralmente o endereço de uma outra variável. Declara-se um ponteiro com um `*` antes do nome.
+
+Antes de ver os exemplos, um aviso: o `*` em C tem dois usos diferentes que costumam confundir no início:
+
+| Onde aparece | O que significa |
+|---|---|
+| `int *p;` (numa declaração) | "`p` é um ponteiro para `int`" |
+| `*p` (fora de uma declaração) | "o valor que está no endereço guardado em `p`" |
+
+Com isso em mente, os exemplos a seguir devem fazer sentido:
 
 ```c
 int x = 10;
@@ -51,13 +84,6 @@ printf("%d\n", *p);   // imprime 10 (o valor de x, acessado via p)
 *p = 20;               // altera x para 20, através de p!
 printf("%d\n", x);     // imprime 20
 ```
-
-O `*` em C tem, portanto, dois usos diferentes que costumam confundir no início:
-
-| Onde aparece | O que significa |
-|---|---|
-| `int *p;` (numa declaração) | "`p` é um ponteiro para `int`" |
-| `*p` (fora de uma declaração) | "o valor que está no endereço guardado em `p`" |
 
 !!! question "Exercício de mapeamento 6.1"
     Sem se preocupar com VisuAlg ou Python desta vez (não há uma tradução direta): escreva um programinha em C que declare um `int idade = 30;`, um ponteiro `int *p` apontando para `idade`, e que:
@@ -147,6 +173,22 @@ void aumenta_nota(struct aluno *a) {
 
 !!! question "Exercício de mapeamento 6.2"
     Usando o `struct ponto { float x, y; };` do Exercício 5.1, escreva uma função `void move(struct ponto *p, float dx, float dy)` que soma `dx` a `p->x` e `dy` a `p->y`, alterando o ponto original. Teste chamando `move(&p1, 1.0, 2.0)` e imprimindo `p1.x` e `p1.y` antes e depois.
+
+### 6.4.1. Combinando `&` e `*`
+
+Como `&` e `*` são só dois operadores comuns, nada impede de aplicá-los em sequência. Se `p` é um ponteiro para `x`, então `&p` é o endereço de `p` — e `*(&p)` volta para o valor de `p`, ou seja, `**&p` é apenas `*p` escrito de um jeito mais longo. Isso não cria nada novo — é só aplicar a mesma regra duas vezes.
+
+O caso realmente novo é quando você **declara** uma variável com dois asteriscos:
+
+```c
+int x = 10;
+int *p = &x;    // p guarda o endereço de x
+int **q = &p;   // q guarda o endereço de p
+```
+
+Aqui `q` é um **ponteiro para ponteiro**: seu valor não é o endereço de um `int`, é o endereço de *outro ponteiro*. Para chegar até o valor de `x` a partir de `q`, você precisa desreferenciar duas vezes: `*q` te dá `p` (o ponteiro), e `**q` te dá `x` (o valor). Cada `*` a mais é "mais um nível de indireção" — a mesma ideia da Seção 6.2, só que aplicada de novo sobre um ponteiro em vez de sobre um `int`.
+
+Isso é raro no dia a dia (o uso mais comum é quando uma função precisa alterar, ela mesma, para onde um ponteiro do chamador aponta), mas vale reconhecer a sintaxe — ela vai aparecer de novo na lista de exercícios deste capítulo.
 
 ### 6.5. Por que precisamos de alocação dinâmica
 
@@ -337,6 +379,9 @@ while atual is not None:
 
 Note como o código Python e o código C, aqui, ficam **estruturalmente parecidos** — a diferença é que em Python `No(10)` já aloca o objeto automaticamente (sem `malloc`) e nunca precisa de `free`; a lógica de percorrer a lista com um ponteiro/referência "andando" (`atual = atual.proximo` / `atual = atual->proximo`) é essencialmente a mesma ideia nas duas linguagens.
 
+!!! tip "Isso volta a aparecer em Estrutura de Dados"
+    O que você acabou de ver é exatamente o que você vai reencontrar, com muito mais profundidade, na **Aula 5 (Lista Encadeada Dinâmica)** de [Estrutura de Dados](https://lambdageo.github.io/estrutura-dados/) — struct auto-referenciado, `malloc` nó a nó, e um ponteiro andando com `->proximo` até `NULL`. Se o exercício a seguir fizer sentido para você, a Aula 5 vai ser, em boa parte, revisão.
+
 !!! question "Exercício de mapeamento 6.3"
     Não existe VisuAlg ou Python "pronto" para traduzir desta vez — o exercício é o caminho inverso. Usando o código Python da lista encadeada acima como roteiro conceitual (não para traduzir literalmente, e sim como guia de "o que a lista precisa fazer"), escreva uma função em C:
 
@@ -359,6 +404,10 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
     - `printf("%d", *p);`
     - `*p = x * 5;`
     - `printf("%d", *(p + 1));`
+
+    !!! note ""
+        Os exercícios 3, 5 e 8 usam `**&p` — releia a Seção 6.4.1 se a notação não estiver clara ainda.
+
 3. Considere `int i = 3, j = 5; int *p, *q; p = &i; q = &j;`. Determine os valores das expressões: (a) `p == &i`; (b) `*p - *q`; (c) `**&p`; (d) `3 * -*p / (*q) + 7`.
 4. Considere:
 
@@ -383,23 +432,23 @@ Note como o código Python e o código C, aqui, ficam **estruturalmente parecido
 6. Considere:
 
     ```c
-    int iVar = 15;
-    int jVar, *pPont, *qPont;
-    pPont = &iVar;
-    jVar = 2 * (*pPont);
-    qPont = pPont + 2;
+    int a = 15;
+    int b, *p, *q;
+    p = &a;
+    b = 2 * (*p);
+    q = p + 2;
     ```
 
-    Supondo que os endereços de `iVar`, `jVar`, `pPont` e `qPont` sejam, respectivamente, `1080`, `1084`, `1088` e `1096`: (a) depois da linha 3, qual é o valor de `pPont`? (b) depois da linha 4, qual é o valor de `jVar`? (c) depois da linha 5, qual é o valor de `qPont` — e por que ele não é simplesmente `1080 + 2`?
+    Supondo que os endereços de `a`, `b`, `p` e `q` sejam, respectivamente, `1080`, `1084`, `1088` e `1096`: (a) depois da linha 3, qual é o valor de `p`? (b) depois da linha 4, qual é o valor de `b`? (c) depois da linha 5, qual é o valor de `q` — e por que ele não é simplesmente `1080 + 2`?
 7. Considere:
 
     ```c
-    int *pti;
+    int *p;
     int i = 10;
-    pti = &i;
+    p = &i;
     ```
 
-    Qual das afirmativas abaixo é **falsa**? (a) `pti` armazena o endereço de `i`; (b) `*pti` é igual a `10`; (c) ao se executar `*pti = 20;`, `i` passa a ter o valor 20; (d) ao se alterar o valor de `i`, `*pti` também muda; (e) `pti` é igual a `10`.
+    Qual das afirmativas abaixo é **falsa**? (a) `p` armazena o endereço de `i`; (b) `*p` é igual a `10`; (c) ao se executar `*p = 20;`, `i` passa a ter o valor 20; (d) ao se alterar o valor de `i`, `*p` também muda; (e) `p` é igual a `10`.
 8. Se `i` e `j` são inteiros, e `p` e `q` são ponteiros para `int`, identifique quais das expressões abaixo são **ilegais** e por quê: (a) `p = &i;`; (b) `*q = &j;`; (c) `p = &*&i;`; (d) `i = (*&)j;`; (e) `i = *&j;`; (f) `i = *&*&j;`; (g) `q = *p;`; (h) `i = (*p)++ + *q;`.
 9. Considere:
 
