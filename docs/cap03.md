@@ -113,7 +113,12 @@ Estas são as noções básicas de escrever programas em C, dando-lhe o suficien
 
 ### 3.4. Lista de exercícios
 
+#### Protótipos e arquivos de cabeçalho
+
 1. Você tem uma função `int quadrado(int x)` que calcula o quadrado de um número, usada dentro de um `main` que lê um número do usuário e imprime o seu quadrado. Separe esse programa em três arquivos: `quadrado.h` (com o protótipo), `quadrado.c` (com a definição da função) e `main.c` (com o `main`, incluindo `quadrado.h`). Escreva também o comando `gcc` necessário para compilar os dois arquivos `.c` juntos, gerando um único executável.
+
+#### A diretiva `#define`
+
 2. Use `#define` para criar duas constantes, `VERDADEIRO` como `1` e `FALSO` como `0`, e escreva um pequeno programa que declare uma variável `int encontrou` e a use dentro de um `if`, comparando com `VERDADEIRO`. Depois, imagine (sem rodar) qual seria o texto exato que o pré-processador entrega ao compilador, com `VERDADEIRO`/`FALSO` já substituídos.
 3. Reescreva o Exercício 8 da lista do Capítulo 2 (números amigáveis) definindo, com `#define`, um `LIMITE` para o intervalo de busca (por exemplo, `#define LIMITE 10000`), e use `LIMITE` no lugar do número mágico espalhado pelo código.
 4. *(desafio)* A diretiva `#define` também aceita "parâmetros", nesse formato:
