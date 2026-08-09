@@ -65,6 +65,8 @@ void exibir(const ContaBancaria *c);
 !!! note "Guardas de Inclusão (#ifndef, #define, #endif)"
     As diretivas `#ifndef CONTA_H`, `#define CONTA_H` e `#endif` são chamadas de **guardas de inclusão** (header guards). Elas garantem que, mesmo que `conta.h` seja incluído múltiplas vezes no mesmo projeto (por exemplo, se `main.c` incluir `conta.h` e outra biblioteca também o fizer), o compilador não tentará ler e declarar a estrutura `ContaBancaria` duas vezes, o que geraria um erro de "redefinição de tipo".
 
+    A maioria dos compiladores atuais (GCC, Clang, MSVC) também aceita uma alternativa de uma linha só, `#pragma once`, colocada no topo do arquivo no lugar do trio `#ifndef`/`#define`/`#endif`. Ela não faz parte do padrão oficial da linguagem C (por isso não é 100% portável para qualquer compilador), mas é comum o suficiente para valer a pena reconhecer se você a encontrar em código de terceiros.
+
 #### 2. A implementação: `conta.c`
 
 ```c

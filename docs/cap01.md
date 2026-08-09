@@ -30,6 +30,9 @@ Ola mundo!
 
 No primeiro comando ("gcc meuprograma.c"), invocamos o compilador, chamado _gcc_. O compilador lê o arquivo meuprograma.c, no qual salvamos nosso código C, e ele gera um novo arquivo chamado meuprograma contendo uma tradução deste código no código binário usado pela máquina. No segundo comando ("./meuprograma"), dizemos ao computador para executar este código binário. Como está executando o programa, o computador não tem idéia de que meuprograma acabou de ser criado a partir de algum programa em C: ele simplesmente executa cegamente o código encontrado no arquivo, da mesma forma que executa cegamente o código encontrado no gcc em resposta ao primeiro comando.
 
+!!! tip "Ligue os avisos do compilador desde já"
+    Vale pegar o hábito, desde o primeiro programa, de compilar com `gcc meuprograma.c -o meuprograma -Wall -Wextra`. As flags `-Wall` e `-Wextra` fazem o gcc avisar sobre problemas comuns que ainda compilam, mas provavelmente não fazem o que você pretendia (por exemplo, usar `%d` num `printf` para imprimir um `double`, ou comparar tipos incompatíveis) — sem elas, o compilador fica calado sobre esses casos. Mais adiante, especialmente no capítulo de ponteiros, esses avisos vão pegar erros que, de outra forma, só apareceriam como comportamento estranho em tempo de execução.
+
 Por outro lado, um **interpretador** lê o programa escrito pelo usuário e o executa diretamente. Isso remove uma etapa do processo de execução, mas um compilador tem a vantagem de gerar um executável que é executado da mesma forma que a maioria dos outros aplicativos da máquina, e usualmente gerando códigos mais rápidos.
 
 Ser compilado tem algumas implicações radicais no design da linguagem. C é projetada para que o compilador possa dizer tudo o que precisa saber para traduzir o programa C sem realmente executar o programa.
@@ -371,8 +374,13 @@ Como você pode ver, o programa C consiste em duas definições de função. Em 
 
 Estes exercícios usam só o que foi visto até aqui: declaração de variáveis, expressões, `printf` e funções — sem `if`, sem laços. Se você sentir falta de alguma dessas ferramentas em algum exercício, é sinal de que ele foi pensado para o próximo capítulo; tente resolver só com o que já foi apresentado.
 
+#### Variáveis e expressões
+
 1. Faça um programa que receba do usuário um número inteiro representando os segundos transcorridos desde 00:00 de um dado dia, e converta-o para horas, minutos e segundos.
 2. Faça um programa que receba 3 valores inteiros do usuário e mostre a sua média (que pode não ser inteira).
 3. Faça um programa que receba o raio de um círculo e imprima sua área e sua circunferência (use `3.14159` no lugar de π).
+
+#### Funções
+
 4. Escreva uma função `double celsius_para_fahrenheit(double c)` que converte uma temperatura de Celsius para Fahrenheit (`F = C * 9.0/5.0 + 32`), e um `main` que lê uma temperatura em Celsius e imprime o resultado usando essa função.
 5. Escreva uma função `int soma(int a, int b)` e outra `int produto(int a, int b)`. No `main`, leia dois números do usuário e imprima a soma e o produto, chamando as duas funções.
