@@ -43,6 +43,7 @@ theme:
     - toc.follow
 
 nav:
+  - "⇦ Coleção LambdaGeo": https://lambdageo.github.io/ebooks/
   - Início: index.md
   - "1. Construindo um simples programa": cap01.md
   - "2. Expressões e comandos": cap02.md
