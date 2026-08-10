@@ -32,6 +32,48 @@ graph TD
     ```
     Isso gerará no seu diretório os arquivos `main.i` (código pré-processado), `main.s` (código em assembly) e `main.o` (código de objeto), além do executável `main`.
 
+### 7.1.1. Aprofundando: macros no pré-processamento
+
+Vimos rapidamente a diretiva `#define` na [Seção 3.3](cap03.md#33-constantes), tanto para constantes simples quanto para macros com "parâmetros" — mas sem explicar exatamente **quando**, no processo de compilação, essa substituição acontece. Agora que você já viu as quatro etapas acima, a resposta é direta: tudo isso acontece na primeira etapa, o **pré-processamento**, antes mesmo do compilador de C ver uma única linha do seu código.
+
+O pré-processador não entende C — ele só entende texto. Quando encontra uma diretiva `#define`, ele simplesmente **copia e cola** a substituição em todo lugar onde o nome aparece depois, sem checar tipos, sem saber o que é uma variável ou uma expressão. É por isso que a tag `--save-temps`, vista na dica acima, é tão útil para depurar macros: o arquivo `.i` gerado mostra exatamente o texto que o compilador de C recebe, já com toda substituição feita.
+
+Considere:
+
+```c
+#define DOBRO(x) ((x) * 2)
+
+int resultado = DOBRO(5 + 1);
+```
+
+Antes de o compilador de C ver essa linha, o pré-processador já a transformou em:
+
+```c
+int resultado = ((5 + 1) * 2);
+```
+
+Repare nos parênteses ao redor de `x` na definição da macro (`(x)`, não só `x`) — sem eles, `DOBRO(5 + 1)` viraria `(5 + 1 * 2)`, que é `7`, não `12`, porque a substituição é puramente textual e não respeita a ordem de operações que você pretendia. Os parênteses existem justamente para "proteger" a expressão recebida antes que ela se misture com o resto da fórmula.
+
+Há um segundo cuidado, além da falta de parênteses: como a macro é copiada e colada, um argumento com **efeito colateral** (algo que muda um valor, como `i++`) pode acabar sendo avaliado mais de uma vez sem você perceber:
+
+```c
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+int i = 5;
+int maior = MAX(i++, 10);   // i++ pode ser expandido (e executado) mais de uma vez!
+```
+
+Como `a` e `b` aparecem duas vezes cada um na definição de `MAX`, dependendo dos valores comparados o texto expandido pode acabar repetindo `i++` mais de uma vez na mesma linha — incrementando `i` mais do que você esperava em uma única chamada. Uma função de verdade nunca teria esse problema, porque o parâmetro é avaliado uma única vez, no momento da chamada, e só o resultado dessa avaliação é usado dentro da função.
+
+| | Macro (`#define`) | Função |
+|---|---|---|
+| Quando "roda" | Em texto, no pré-processamento — antes de compilar | Em tempo de execução, quando chamada |
+| Verifica tipos dos argumentos | Não — é só substituição de texto | Sim — o compilador confere contra o protótipo |
+| Pode avaliar um argumento mais de uma vez | Sim, se o argumento aparecer mais de uma vez na definição | Não — o argumento é avaliado uma vez, antes da chamada |
+| Aparece no depurador (debugger) | Não — o depurador só vê o código já expandido | Sim — dá para colocar um breakpoint dentro dela |
+
+Na prática, para a maioria dos casos em que você teria vontade de usar uma macro com "parâmetros" (como `DOBRO` ou `MAX` acima), uma função comum é hoje considerada mais segura e mais fácil de depurar. Macros function-like continuam existindo principalmente por compatibilidade com código antigo e para alguns usos específicos — como gerar código repetitivo automaticamente — que fogem do escopo deste livro.
+
 ---
 
 ### 7.2. Compilação separada na prática: exemplo da conta bancária

@@ -300,7 +300,38 @@ Os três casos usam a mesma ideia — um valor "de dentro" de outro — e o aces
 
     Escreva os `struct`s equivalentes em C (`struct data` e `struct livro`, com `livro` tendo um campo do tipo `struct data`), declare e preencha uma variável `livro1` com os mesmos valores, e imprima o título e o ano de publicação.
 
-### 5.7. Lista de exercícios
+### 5.7. `union`: quando os campos compartilham espaço
+
+Existe uma variação de `struct` chamada `union`, que se declara com uma sintaxe quase idêntica:
+
+```c
+union valor {
+    int i;
+    float f;
+    char c;
+};
+```
+
+A diferença crucial não está na sintaxe, e sim na memória: em um `struct`, cada campo tem seu próprio espaço reservado, e o tamanho total é a **soma** de todos os campos. Em uma `union`, **todos os campos compartilham o mesmo espaço de memória** — o tamanho total é o do **maior** campo, não a soma. Isso quer dizer que, em um dado momento, uma variável `union valor` só guarda um valor útil por vez: escrever em um campo sobrescreve o que estava nos outros, porque fisicamente é a mesma memória por baixo.
+
+```c
+union valor v;
+v.i = 65;
+printf("%d\n", v.i);   // 65
+
+v.f = 3.14;
+printf("%d\n", v.i);   // lixo -- v.i nao e mais valido, o espaco foi reescrito como float
+```
+
+| | `struct` | `union` |
+|---|---|---|
+| Cada campo tem seu próprio espaço | sim | não — todos compartilham o mesmo espaço |
+| Tamanho total | soma dos campos | tamanho do maior campo |
+| Quantos campos têm valor válido ao mesmo tempo | todos | só o último que foi escrito |
+
+Na prática, você vai usar `struct` com muito mais frequência do que `union` — a grande maioria dos programas do dia a dia agrupa dados que **coexistem** (um aluno tem nome *e* notas ao mesmo tempo), que é exatamente o caso de uso de `struct`. `union` aparece em situações mais específicas, como economizar memória quando se sabe que só um entre vários campos vai estar em uso por vez, ou representar os mesmos bytes de mais de uma forma (comum em código de sistemas e protocolos de rede). Não é um tipo que voltaremos a usar no restante deste livro, mas vale reconhecer a sintaxe e a diferença de memória caso você encontre uma `union` em código de terceiros.
+
+### 5.8. Lista de exercícios
 
 #### Questões teóricas
 
